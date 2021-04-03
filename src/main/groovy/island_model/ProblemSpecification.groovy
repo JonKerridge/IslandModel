@@ -5,13 +5,15 @@ package island_model
  * the values required by the problem being solved.
  * An object instance is passed as a parameter to the EmitProblem process which then
  * uses the values to set up the processing.
+ * EmitProblem uses the specification to create a number of specifications, each with a different
+ * instance value. This value will be checked internally to enaure consistency.
+ * The public constructor for the population class must initialise all the properties
  *
- * @param individualClass the name of the class that implements the Individual interface that
- * defines an individual of the problem
  * @param populationClass the name of the class that implements the problem's population object
  * @param dataFileName the name of a file that holds data required by the application, for example,
  * in a TSP application it would hold the distance matrix
  * @param instance the run number of problem to be sent for solution (modified in EmitProblem)
+ * @param geneLength the number of genes in a chromosome
  * @param populationPerNode the number of individuals maintained by each node
  * @param migrationInterval the number of generation between each migration/immigration phase
  * @param crossoverPoints the number of crossover points to be used in reproduction
@@ -24,8 +26,9 @@ package island_model
  *
  */
 class ProblemSpecification {
-  String individualClass, populationClass, dataFileName
-  int instance, populationPerNode, migrationInterval, crossoverPoints, maxGenerations
+//  String individualClass
+  String populationClass, dataFileName
+  int instance, geneLength, populationPerNode, migrationInterval, crossoverPoints, maxGenerations
   double crossoverProbability, mutationProbability
   List <Long> seeds
   /**
@@ -38,7 +41,7 @@ class ProblemSpecification {
   void modifySeeds(int i){
     //seeds.each{long s -> s = s}
     // a more interesting implementation would be to change each seed by a constant amount
-    // in this example 1 is added to each seed
+    // in this default example 1 is added to each seed
     for (s in 0 ..< seeds.size()) seeds[s] = seeds[s] + (i*1)
   }
   /**
@@ -47,10 +50,11 @@ class ProblemSpecification {
   ProblemSpecification copySpecification(){
     ProblemSpecification ps = new ProblemSpecification()
     ps.instance = instance
-    ps.individualClass = individualClass
+//    ps.individualClass = individualClass
     ps.populationClass = populationClass
     ps.dataFileName = dataFileName
     ps.populationPerNode = populationPerNode
+    ps.geneLength = geneLength
     ps.migrationInterval = migrationInterval
     ps.crossoverPoints = crossoverPoints
     ps.maxGenerations  = maxGenerations
@@ -65,6 +69,18 @@ class ProblemSpecification {
 
   @Override
   public String toString() {
-    return "ProblemSpecification{" + "individualClass='" + individualClass + '\'' + ", populationClass='" + populationClass + '\'' + ", dataFileName='" + dataFileName + '\'' + ", instance=" + instance + ", populationPerNode=" + populationPerNode + ", migrationInterval=" + migrationInterval + ", crossoverPoints=" + crossoverPoints + ", maxGenerations=" + maxGenerations + ", crossoverProbability=" + crossoverProbability + ", mutationProbability=" + mutationProbability + ", seeds=" + seeds + '}';
+    return "ProblemSpecification{" +
+//        "individualClass='" + individualClass + '\'' +
+        ",\n populationClass='" + populationClass + '\'' +
+        ",\n dataFileName='" + dataFileName + '\'' +
+        ",\n instance=" + instance +
+        ",\n populationPerNode=" + populationPerNode +
+        ",\n geneLength=" + geneLength +
+        ",\n migrationInterval=" + migrationInterval +
+        ",\n crossoverPoints=" + crossoverPoints +
+        ",\n maxGenerations=" + maxGenerations +
+        ",\n crossoverProbability=" + crossoverProbability +
+        ",\n mutationProbability=" + mutationProbability +
+        ",\n seeds=" + seeds + '}';
   }
 }
