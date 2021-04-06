@@ -47,7 +47,6 @@ class MaxOneIndividual implements Individual{
   public String toString() {
     return "MaxOneIndividual{" + "fitness=" + fitness +
         ", chromosome=" + chromosome +
-        ", rng=" + rng +
         ", geneLength=" + geneLength + '}';
   }
 }

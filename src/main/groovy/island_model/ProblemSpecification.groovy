@@ -11,7 +11,7 @@ package island_model
  *
  * @param populationClass the name of the class that implements the problem's population object
  * @param dataFileName the name of a file that holds data required by the application, for example,
- * in a TSP application it would hold the distance matrix
+ * in a TSP application it would hold the distance matrix, null if not required
  * @param instance the run number of problem to be sent for solution (modified in EmitProblem)
  * @param geneLength the number of genes in a chromosome
  * @param populationPerNode the number of individuals maintained by each node
@@ -23,6 +23,9 @@ package island_model
  * @param mutationProbability the probability of a mutation taking place in a reproduction offspring
  * @param seeds the initial seeds used by each node for their random number generator (one per node)
  *
+ * @param nodes the number of nodes
+ * @param instances the number of instances
+ * these last two are for documentation only
  *
  */
 class ProblemSpecification {
@@ -30,6 +33,7 @@ class ProblemSpecification {
   String populationClass, dataFileName
   int instance, geneLength, populationPerNode, migrationInterval, crossoverPoints, maxGenerations
   double crossoverProbability, mutationProbability
+  int nodes, instances
   List <Long> seeds
   /**
    * After each problemSpecification instance is written to the output the values of the
@@ -41,8 +45,8 @@ class ProblemSpecification {
   void modifySeeds(int i){
     //seeds.each{long s -> s = s}
     // a more interesting implementation would be to change each seed by a constant amount
-    // in this default example 1 is added to each seed
-    for (s in 0 ..< seeds.size()) seeds[s] = seeds[s] + (i*1)
+    // in this default example 2 is added to each seed
+    for (s in 0 ..< seeds.size()) seeds[s] = seeds[s] + 2
   }
   /**
    * In several places a deep copy of the specification is required.
@@ -60,6 +64,8 @@ class ProblemSpecification {
     ps.maxGenerations  = maxGenerations
     ps.crossoverProbability = crossoverProbability
     ps.mutationProbability = mutationProbability
+    ps.nodes = nodes
+    ps.instances = instances
     ps.seeds = []
     for ( s in 0 ..< seeds.size())
       ps.seeds[s] = seeds[s]
@@ -70,7 +76,8 @@ class ProblemSpecification {
   @Override
   public String toString() {
     return "ProblemSpecification{" +
-//        "individualClass='" + individualClass + '\'' +
+        "\n nodes=" + nodes +
+        ",\n instances=" + instances +
         ",\n populationClass='" + populationClass + '\'' +
         ",\n dataFileName='" + dataFileName + '\'' +
         ",\n instance=" + instance +

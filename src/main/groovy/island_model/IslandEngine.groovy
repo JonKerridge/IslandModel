@@ -5,11 +5,12 @@ import groovy_jcsp.ChannelOutputList
 import groovy_jcsp.PAR
 import jcsp.lang.Channel
 
-class IslandEngine {
+class IslandEngine  {
 
   ProblemSpecification problemSpecification
   int instances
   int nodes
+  IslandTopology topology
 
   void  invoke() {
     def emitToIC = Channel.one2one()
@@ -22,10 +23,11 @@ class IslandEngine {
     def emit = new EmitProblem( problemSpecification: problemSpecification,
         instances: instances,
         output: emitToIC.out())
-    def coordinator = new IslandCoordinator(input: emitToIC.in(),
+    def coordinator = new IslandCoordinator (input: emitToIC.in(),
         instances: instances,
         output: icToCollect.out(),
         toNodes: ic2Nodes,
+        topology: topology,
         nodes: nodes,
         fromNodes: nodes2IC)
     def collect = new CollectSolution(input: icToCollect.in(),

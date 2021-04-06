@@ -9,20 +9,26 @@ class MaxOnePopulation implements Population{
   int geneLength
   double crossoverProbability
   double mutateProbability
+  String dataFileName
   Random rng
 
-  MaxOnePopulation (int individuals, int geneLength,
-                    double crossoverProbability, double mutateProbability,
+  MaxOnePopulation (int individuals,
+                    int geneLength,
+                    double crossoverProbability,
+                    double mutateProbability,
+                    String dataFileName,
                     Random rng) {
     this.individuals = individuals
     this.rng = rng
     this.geneLength = geneLength
     this.crossoverProbability = crossoverProbability
     this.mutateProbability = mutateProbability
+    this.dataFileName = dataFileName
     population = []
     for ( i in 0 ..< individuals){
       population << new MaxOneIndividual(geneLength, rng)
     }
+    processDataFile()
   }
 
   @Override
@@ -86,7 +92,7 @@ class MaxOnePopulation implements Population{
         secondWorstFitness = worstFitness
         worst = i
         worstFitness = currentFit
-      } else if ((currentFit = population[i].getFitness())  > secondWorstFitness){
+      } else if ((currentFit = population[i].getFitness())  < secondWorstFitness){
         secondWorst = i
         secondWorstFitness = currentFit
       }
@@ -110,7 +116,7 @@ class MaxOnePopulation implements Population{
     // now do the crossover in this case a single point crossover
     int xOverPoint = rng.nextInt(geneLength)
     List <MaxOneIndividual> offspring = []
-    for ( i in 0 .. 1) offspring[i] = new MaxOneIndividual()
+    for ( i in 0 .. 1) offspring[i] = new MaxOneIndividual(geneLength)
     for (i in 0 ..< xOverPoint)
       offspring[0].chromosome[i] = ((MaxOneIndividual)population[parents[0]]).chromosome[i]
     for (i in xOverPoint ..< geneLength)
@@ -121,6 +127,11 @@ class MaxOnePopulation implements Population{
       offspring[1].chromosome[i] = ((MaxOneIndividual)population[parents[0]]).chromosome[i]
     offspring[0].evaluateFitness()
     offspring[1].evaluateFitness()
+//    println "Reproducing $parents, $possibleOverwrites, $crossoverPoints, $xOverPoint\n " +
+//        "P0: ${population[parents[0]]}\n " +
+//        "P1: ${population[parents[1]]}\n   " +
+//        "O0: ${offspring[0]}\n   " +
+//        "O1: ${offspring[1]}"
     // now do mutations on the offspring
     if (rng.nextDouble() < mutateProbability)
       offspring[0].mutate(rng)
@@ -181,5 +192,13 @@ class MaxOnePopulation implements Population{
       return population[p]  // the individual that has converged
     else
       return null
+  }
+
+  @Override
+  void processDataFile() {
+    if (dataFileName != null){
+      println "Processing data file $dataFileName"
+      // process the data file into a user defined data structure
+    }
   }
 }

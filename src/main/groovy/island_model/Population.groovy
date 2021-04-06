@@ -18,6 +18,10 @@ package island_model
  * contained in incomers
  * @param convergence returns an Individual that satisfies the
  * model's convergence criteria if achieved or null otherwise
+ * @param processDataFile, if the application requires a data file, for
+ * example TSP needs a set of cities and distances, then this method is used
+ * to read the file with the path dataFileName.
+ * dataFileName is null if no data file is required.
  */
 interface Population {
 //  int best, secondBest, worst, secondWorse
@@ -32,4 +36,5 @@ interface Population {
   List <Individual> getMigrants(List <Integer> migrantIndices)
   void includeImmigrants(List <Individual> incomers, List <Integer> migrantIndices)
   Individual convergence ()
+  void processDataFile ()
 }

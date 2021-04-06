@@ -26,6 +26,6 @@ class EmitProblem implements CSProcess{
       output.write(ps)
       problemSpecification.modifySeeds(i+1)
     }
-    println "EP: terminating"
+//    println "EP: terminating"
   }
 }
