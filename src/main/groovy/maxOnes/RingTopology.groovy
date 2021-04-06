@@ -9,7 +9,9 @@ class RingTopology implements IslandTopology{
   @Override
   void distribute(List<MigrantRecord> forMigration, ChannelOutputList toNodes) {
     int nodes = toNodes.size()
-    for ( n in 0 ..< nodes)
-      toNodes[(n+1)%nodes].write(forMigration[n] as MigrantRecord)
+    for ( n in 0 ..< nodes) {
+      toNodes[(n + 1) % nodes].write(forMigration[n] as MigrantRecord)
+//      println "Transferring from $n to ${(n + 1) % nodes} : "
+    }
   }
 }

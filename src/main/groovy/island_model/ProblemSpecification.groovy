@@ -74,20 +74,27 @@ class ProblemSpecification {
 
 
   @Override
-  public String toString() {
-    return "ProblemSpecification{" +
-        "\n nodes=" + nodes +
-        ",\n instances=" + instances +
-        ",\n populationClass='" + populationClass + '\'' +
-        ",\n dataFileName='" + dataFileName + '\'' +
-        ",\n instance=" + instance +
-        ",\n populationPerNode=" + populationPerNode +
-        ",\n geneLength=" + geneLength +
-        ",\n migrationInterval=" + migrationInterval +
-        ",\n crossoverPoints=" + crossoverPoints +
-        ",\n maxGenerations=" + maxGenerations +
-        ",\n crossoverProbability=" + crossoverProbability +
-        ",\n mutationProbability=" + mutationProbability +
-        ",\n seeds=" + seeds + '}';
+//  public String toString() {
+//    return "ProblemSpecification{" +
+//        "\n nodes=" + nodes +
+//        ",\n instances=" + instances +
+//        ",\n populationClass='" + populationClass + '\'' +
+//        ",\n dataFileName='" + dataFileName + '\'' +
+//        ",\n instance=" + instance +
+//        ",\n populationPerNode=" + populationPerNode +
+//        ",\n geneLength=" + geneLength +
+//        ",\n migrationInterval=" + migrationInterval +
+//        ",\n crossoverPoints=" + crossoverPoints +
+//        ",\n maxGenerations=" + maxGenerations +
+//        ",\n crossoverProbability=" + crossoverProbability +
+//        ",\n mutationProbability=" + mutationProbability +
+//        ",\n seeds=" + seeds + '}';
+//  }
+
+  @Override
+  String toString() {
+  return "$nodes, $instances, $populationClass, $dataFileName, " +
+      "$populationPerNode, $geneLength, $migrationInterval, $crossoverPoints, " +
+      "$maxGenerations, $crossoverProbability, $mutationProbability, , "
   }
 }
