@@ -16,6 +16,7 @@ package island_model
  * @param geneLength the number of genes in a chromosome
  * @param populationPerNode the number of individuals maintained by each node
  * @param migrationInterval the number of generation between each migration/immigration phase
+ * @param migrationSize the number of individuals to be chosen during migration phase
  * @param crossoverPoints the number of crossover points to be used in reproduction
  * @param maxGenerations the maximum number of generations before the application is stopped
  * if convergence has not been found
@@ -31,7 +32,8 @@ package island_model
 class ProblemSpecification {
 //  String individualClass
   String populationClass, dataFileName
-  int instance, geneLength, populationPerNode, migrationInterval, crossoverPoints, maxGenerations
+  int instance, geneLength, populationPerNode
+  int migrationInterval, migrationSize, crossoverPoints, maxGenerations
   double crossoverProbability, mutationProbability
   int nodes, instances
   List <Long> seeds
@@ -60,6 +62,7 @@ class ProblemSpecification {
     ps.populationPerNode = populationPerNode
     ps.geneLength = geneLength
     ps.migrationInterval = migrationInterval
+    ps.migrationSize = migrationSize
     ps.crossoverPoints = crossoverPoints
     ps.maxGenerations  = maxGenerations
     ps.crossoverProbability = crossoverProbability
@@ -93,8 +96,8 @@ class ProblemSpecification {
 
   @Override
   String toString() {
-  return "$nodes, $instances, $populationClass, $dataFileName, " +
-      "$populationPerNode, $geneLength, $migrationInterval, $crossoverPoints, " +
+  return "$nodes, $instances, $populationClass, $dataFileName, $populationPerNode, " +
+      "$geneLength, $migrationInterval, $migrationSize, $crossoverPoints, " +
       "$maxGenerations, $crossoverProbability, $mutationProbability, , "
   }
 }

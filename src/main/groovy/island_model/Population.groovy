@@ -32,7 +32,7 @@ interface Population {
   List <Integer> selectParents()
   List <Integer> selectLeastFit()
   void reproduce(int crossoverPoints)
-  List <Integer> selectMigrants()
+  List <Integer> selectMigrants(int migrationSize)
   List <Individual> getMigrants(List <Integer> migrantIndices)
   void includeImmigrants(List <Individual> incomers, List <Integer> migrantIndices)
   Individual convergence ()

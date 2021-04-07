@@ -14,6 +14,7 @@ maxOnesSpecification.populationClass = MaxOnePopulation.getName()
 maxOnesSpecification.geneLength = 128
 maxOnesSpecification.populationPerNode = 16
 maxOnesSpecification.migrationInterval = 1000
+maxOnesSpecification.migrationSize = 4
 maxOnesSpecification.crossoverPoints = 1
 maxOnesSpecification.maxGenerations = 10000
 maxOnesSpecification.crossoverProbability = 1.0

@@ -162,10 +162,18 @@ class MaxOnePopulation implements Population{
   }
 
   @Override
-  List <Integer> selectMigrants() {
+  List <Integer> selectMigrants(int migrationSize) {
     // just return some of the individuals without any selection
     // assumes more than 14 Individuals in population
-    return [3,5,7,11,13]
+    // return [3,5,7,11,13]
+    List <Integer> migrants = []
+    for ( i in 0 ..< migrationSize){
+      int index = rng.nextInt(individuals)
+      while (migrants.contains(index)) index = rng.nextInt(individuals)
+      migrants << index
+    }
+//    println "Migrants $migrants"
+    return migrants
   }
 
   List <Individual> getMigrants(List <Integer> migrantIndices){

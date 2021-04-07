@@ -24,6 +24,7 @@ class IslandNode implements CSProcess{
       int instance = spec.instance
       assert instance == i : "Mismatch between Node instance value and local counter"
       int migrationInterval = spec.migrationInterval
+      int migrationSize = spec.migrationSize
       int crossoverPoints = spec.crossoverPoints
       int maxGenerations = spec.maxGenerations
       double crossoverProbability = spec.crossoverProbability
@@ -69,7 +70,7 @@ class IslandNode implements CSProcess{
             toCoordinator.write(convergent)
           else {
             //undertaking migration
-            List <Integer> migrantIndices = pop.selectMigrants()
+            List <Integer> migrantIndices = pop.selectMigrants(migrationSize)
             toCoordinator.write(new MigrantRecord(
                 migratingIndividuals:pop.getMigrants(migrantIndices)))
             // returned object could be either MigrantRecord or TerminateRecord

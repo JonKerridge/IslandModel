@@ -10,6 +10,7 @@ class CollectSolution implements CSProcess{
 
   void run(){
     // initially the CollectSolution process reads the problem specification
+    println "\n"
     for ( i in 0 ..< instances) {
       ProblemSpecification spec = input.read() as ProblemSpecification
       long startTime = System.currentTimeMillis()
@@ -34,6 +35,7 @@ class CollectSolution implements CSProcess{
             "${solutions[minSolution].generationsTaken}, " +
             "${solutions[minSolution].seedValue}, ${endTime - startTime} \n"
       }
+
     }
 //    println "CS: terminated"
   }
