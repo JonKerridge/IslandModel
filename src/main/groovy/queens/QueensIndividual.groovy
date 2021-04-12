@@ -1,0 +1,3 @@
+package queens
+
+class QueensIndividual {}

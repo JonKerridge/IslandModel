@@ -1,6 +1,5 @@
 package island_model
 
-import com.github.javaparser.Problem
 import jcsp.lang.CSProcess
 import jcsp.lang.ChannelOutput
 
@@ -18,13 +17,14 @@ class EmitProblem implements CSProcess{
   ProblemSpecification problemSpecification
   ChannelOutput output
   int instances
+  boolean doSeedModify
 
   void run(){
     for ( i in 0 ..< instances) {
       ProblemSpecification ps = problemSpecification.copySpecification()
       ps.instance = i
       output.write(ps)
-      problemSpecification.modifySeeds(i+1)
+      problemSpecification.modifySeeds(doSeedModify)
     }
 //    println "EP: terminating"
   }

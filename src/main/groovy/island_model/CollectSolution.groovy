@@ -7,21 +7,22 @@ class CollectSolution implements CSProcess{
 
   ChannelInput input
   int instances
+  PrintWriter printWriter
 
   void run(){
-    // initially the CollectSolution process reads the problem specification
-    println "\n"
+    String outString
     for ( i in 0 ..< instances) {
+      // initially the CollectSolution process reads the problem specification
       ProblemSpecification spec = input.read() as ProblemSpecification
       long startTime = System.currentTimeMillis()
-      print "$i, , ${spec.toString()}"
       // now read result
       List result = input.read()
       long endTime = System.currentTimeMillis()
+      outString = "$i, spec , ${spec.toString()} result, "
       if (result == [])
-        print " null, , , , ${endTime - startTime} \n"
+        outString = outString +  " null, , , , , ${endTime - startTime}"
       else {
-        // more than one node could find a solution; we want minimum generations
+        // more than one node might find a solution; we want minimum generations
         int minGenerations = spec.maxGenerations + 1
         int minSolution
         List <ConvergedRecord> solutions = result as List <ConvergedRecord>
@@ -30,12 +31,14 @@ class CollectSolution implements CSProcess{
             minGenerations = solutions[s].generationsTaken
             minSolution = s
           }
-        print " ${solutions.size()}, " +
+        outString = outString +  " ${solutions.size()}, " +
+            "${solutions[minSolution].convergedIndividual.getFitness()}," +
             "${solutions[minSolution].findingNode}, " +
             "${solutions[minSolution].generationsTaken}, " +
-            "${solutions[minSolution].seedValue}, ${endTime - startTime} \n"
+            "${solutions[minSolution].seedValue}, ${endTime - startTime} "
       }
-
+      println "$outString"
+      printWriter.println(outString)
     }
 //    println "CS: terminated"
   }

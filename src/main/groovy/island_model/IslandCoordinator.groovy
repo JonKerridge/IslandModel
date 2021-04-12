@@ -7,7 +7,6 @@ import jcsp.lang.ChannelInput
 import jcsp.lang.ChannelOutput
 
 class IslandCoordinator implements CSProcess{
-// T must implement the IslandTopology interface
   ChannelInput input
   ChannelOutput output
   ChannelOutputList toNodes
@@ -60,6 +59,9 @@ class IslandCoordinator implements CSProcess{
           migratingIndices.each {
             toNodes[it].write(new TerminateRecord(terminate: false))
           }
+          // if the remaining nodes want to Terminate then they will already have stopped
+          // processing this instance.  This will only happen if convergence occurs after
+          // the last possible migration phase before termination
           running = false
         }
         else  {
@@ -79,8 +81,6 @@ class IslandCoordinator implements CSProcess{
 //            println "IC : MIGRATION $migrationCounter"
             migrationCounter = migrationCounter +1
             topology.distribute(returns , toNodes)
-//            for ( n in 0 ..< nodes)
-//              toNodes[(n+1)%nodes].write(returns[n] as MigrantRecord)
           }
         }// convergence testing
       } // running loop

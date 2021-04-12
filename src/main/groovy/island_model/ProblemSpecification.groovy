@@ -6,16 +6,16 @@ package island_model
  * An object instance is passed as a parameter to the EmitProblem process which then
  * uses the values to set up the processing.
  * EmitProblem uses the specification to create a number of specifications, each with a different
- * instance value. This value will be checked internally to enaure consistency.
+ * instance value. This value will be checked internally to ensure consistency.
  * The public constructor for the population class must initialise all the properties
  *
  * @param populationClass the name of the class that implements the problem's population object
  * @param dataFileName the name of a file that holds data required by the application, for example,
  * in a TSP application it would hold the distance matrix, null if not required
- * @param instance the run number of problem to be sent for solution (modified in EmitProblem)
+ * @param instance the run number of the problem to be sent for solution (modified in EmitProblem)
  * @param geneLength the number of genes in a chromosome
  * @param populationPerNode the number of individuals maintained by each node
- * @param migrationInterval the number of generation between each migration/immigration phase
+ * @param migrationInterval the number of generations between each migration/immigration phase
  * @param migrationSize the number of individuals to be chosen during migration phase
  * @param crossoverPoints the number of crossover points to be used in reproduction
  * @param maxGenerations the maximum number of generations before the application is stopped
@@ -30,25 +30,26 @@ package island_model
  *
  */
 class ProblemSpecification {
-//  String individualClass
   String populationClass, dataFileName
   int instance, geneLength, populationPerNode
   int migrationInterval, migrationSize, crossoverPoints, maxGenerations
   double crossoverProbability, mutationProbability
   int nodes, instances
+  boolean doSeedModify
   List <Long> seeds
+
   /**
-   * After each problemSpecification instance is written to the output the values of the
+   * After each ProblemSpecification instance is written to the output the values of the
    * seeds are altered using this method.  The value of instance and the seeds are the
    * only properties that changes value.  The default implementation increments each seed
-   * value by 1 with each new instance.
-   * The value of instance is updated in the EmitProblem process.
+   * value by 2 with each new instance. The value of instance is updated in the EmitProblem process,
+   * provided doSeedModify is true.  The default implementation adds 2 to each seed.
+   *
+   * @param doSeedModify the seed modification is undertaken only if true
    */
-  void modifySeeds(int i){
-    //seeds.each{long s -> s = s}
-    // a more interesting implementation would be to change each seed by a constant amount
-    // in this default example 2 is added to each seed
-    for (s in 0 ..< seeds.size()) seeds[s] = seeds[s] + 2
+  void modifySeeds(boolean doSeedModify){
+    if (doSeedModify)
+      for (s in 0 ..< seeds.size()) seeds[s] = seeds[s] + 2
   }
   /**
    * In several places a deep copy of the specification is required.
@@ -56,7 +57,6 @@ class ProblemSpecification {
   ProblemSpecification copySpecification(){
     ProblemSpecification ps = new ProblemSpecification()
     ps.instance = instance
-//    ps.individualClass = individualClass
     ps.populationClass = populationClass
     ps.dataFileName = dataFileName
     ps.populationPerNode = populationPerNode
@@ -96,8 +96,8 @@ class ProblemSpecification {
 
   @Override
   String toString() {
-  return "$nodes, $instances, $populationClass, $dataFileName, $populationPerNode, " +
+  return "$nodes, $instances, $populationPerNode, " +
       "$geneLength, $migrationInterval, $migrationSize, $crossoverPoints, " +
-      "$maxGenerations, $crossoverProbability, $mutationProbability, , "
+      "$maxGenerations, $crossoverProbability, $mutationProbability, "
   }
 }

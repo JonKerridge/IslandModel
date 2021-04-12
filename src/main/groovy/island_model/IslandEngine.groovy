@@ -11,6 +11,8 @@ class IslandEngine  {
   int instances
   int nodes
   IslandTopology topology
+  boolean doSeedModify
+  PrintWriter printWriter
 
   void  invoke() {
     def emitToIC = Channel.one2one()
@@ -22,6 +24,7 @@ class IslandEngine  {
 
     def emit = new EmitProblem( problemSpecification: problemSpecification,
         instances: instances,
+        doSeedModify: doSeedModify,
         output: emitToIC.out())
     def coordinator = new IslandCoordinator (input: emitToIC.in(),
         instances: instances,
@@ -31,6 +34,7 @@ class IslandEngine  {
         nodes: nodes,
         fromNodes: nodes2IC)
     def collect = new CollectSolution(input: icToCollect.in(),
+        printWriter: printWriter,
         instances: instances)
 
     def nodeProcesses = (0 ..< nodes).collect() { i ->
