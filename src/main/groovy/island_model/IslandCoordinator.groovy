@@ -30,7 +30,9 @@ class IslandCoordinator implements CSProcess{
       boolean running = true
       while (running){
         // read inputs from each node in parallel
+//        println "starting coordinator loop"
         List returns = fromNodes.read()
+//        println "IC ${returns.size()} returns read"
         // each return could be ConvergedRecord or TerminateRecord(true)
         // or MigrantRecord  need to determine specific composition
         List <Integer> convergedIndices = []

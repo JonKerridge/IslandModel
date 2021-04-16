@@ -11,7 +11,7 @@ class RingTopology implements IslandTopology{
     int nodes = toNodes.size()
     for ( n in 0 ..< nodes) {
       toNodes[(n + 1) % nodes].write(forMigration[n] as MigrantRecord)
-//      println "Transferring from $n to ${(n + 1) % nodes} : "
+//      println "Topology Transferring from $n to ${(n + 1) % nodes} : "
     }
   }
 }

@@ -37,7 +37,7 @@ class IslandNode implements CSProcess{
           spec.geneLength,
           spec.crossoverProbability,
           spec.mutationProbability,
-          spec.dataFileName, rng )
+          spec.dataFileName, rng, nodeID)
       Individual foundIndividual
       ConvergedRecord convergent = null
       int generation = 0
@@ -46,6 +46,7 @@ class IslandNode implements CSProcess{
       boolean terminated = false
       while ((! converged)  && (! terminated) && (generation < maxGenerations) ){
         // undertake generation processing
+//        println "Node $nodeID: starting gen loop, $converged, $generation, $migrationCount"
         if (rng.nextDouble() < crossoverProbability) {
           pop.reproduce(crossoverPoints)
         }
@@ -81,7 +82,7 @@ class IslandNode implements CSProcess{
               assert !((TerminateRecord) returnedData).terminate :
                   "Node $nodeID: Terminate Record has wrong value, false expected"
               terminated = true
-//              println "IN-$nodeID received TerminateRecord"
+              //println "IN-$nodeID received TerminateRecord"
             }
             else {
               // have got some new immigrants to be incorporated
@@ -93,7 +94,7 @@ class IslandNode implements CSProcess{
 //              immigrants.each{println "$it"}
               pop.includeImmigrants(immigrants, migrantIndices)
               migrationCount = 0
-//              println "IN-$nodeID received Immigrant Record"
+              //println "IN-$nodeID received Immigrant Record"
             } // returned record processing
           } // converged test
         } // end of migration count processing
@@ -108,8 +109,8 @@ class IslandNode implements CSProcess{
       if (( ! terminated) && (! converged))
           // have definitely exceeded maxGenerations
           toCoordinator.write (new TerminateRecord(terminate: true))
-//      println "Node $nodeID instance $i terminated $converged, $terminated"
+      //println "Node $nodeID instance $i terminated $converged, $terminated"
     }  // each instance
-//    println "Node $nodeID terminated"
+    //println "Node $nodeID terminated"
   }
 }

@@ -10,6 +10,7 @@ class MaxOnePopulation implements Population{
   double crossoverProbability
   double mutateProbability
   String dataFileName
+  int nodeID
   Random rng
 
   MaxOnePopulation (int individuals,
@@ -17,7 +18,7 @@ class MaxOnePopulation implements Population{
                     double crossoverProbability,
                     double mutateProbability,
                     String dataFileName,
-                    Random rng) {
+                    Random rng, int nodeID) {
     this.individuals = individuals
     this.rng = rng
     this.geneLength = geneLength
@@ -25,6 +26,7 @@ class MaxOnePopulation implements Population{
     this.mutateProbability = mutateProbability
     this.dataFileName = dataFileName
     population = []
+    this.nodeID = nodeID
     for ( i in 0 ..< individuals){
       population << new MaxOneIndividual(geneLength, rng)
     }
@@ -125,8 +127,6 @@ class MaxOnePopulation implements Population{
       offspring[1].chromosome[i] = ((MaxOneIndividual)population[parents[1]]).chromosome[i]
     for (i in xOverPoint ..< geneLength)
       offspring[1].chromosome[i] = ((MaxOneIndividual)population[parents[0]]).chromosome[i]
-    offspring[0].evaluateFitness()
-    offspring[1].evaluateFitness()
 //    println "Reproducing $parents, $possibleOverwrites, $crossoverPoints, $xOverPoint\n " +
 //        "P0: ${population[parents[0]]}\n " +
 //        "P1: ${population[parents[1]]}\n   " +
@@ -137,6 +137,8 @@ class MaxOnePopulation implements Population{
       offspring[0].mutate(rng)
     if (rng.nextDouble() < mutateProbability)
       offspring[1].mutate(rng)
+    offspring[0].evaluateFitness()
+    offspring[1].evaluateFitness()
     // order offspring so index 0 is the better
     if (offspring[1].getFitness() > offspring[0].getFitness()) offspring.swap(0,1)
     // possible overwrites are already so ordered

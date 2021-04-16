@@ -80,6 +80,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\src\main\groovy\queens\QueensPopulation.groovy">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\groovy\queens\RunQueens.groovy">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\src\test\groovy\island_model_test\Test_modifySeeds.groovy">
           <value>
             <Attribute>

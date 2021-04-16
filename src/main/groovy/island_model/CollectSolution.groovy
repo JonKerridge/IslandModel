@@ -18,7 +18,7 @@ class CollectSolution implements CSProcess{
       // now read result
       List result = input.read()
       long endTime = System.currentTimeMillis()
-      outString = "$i, spec , ${spec.toString()} result, "
+      outString = "$i, spec, ${spec.toString()} result, "
       if (result == [])
         outString = outString +  " null, , , , , ${endTime - startTime}"
       else {
@@ -32,7 +32,7 @@ class CollectSolution implements CSProcess{
             minSolution = s
           }
         outString = outString +  " ${solutions.size()}, " +
-            "${solutions[minSolution].convergedIndividual.getFitness()}," +
+            "${solutions[minSolution].convergedIndividual.getFitness()}, " +
             "${solutions[minSolution].findingNode}, " +
             "${solutions[minSolution].generationsTaken}, " +
             "${solutions[minSolution].seedValue}, ${endTime - startTime} "
