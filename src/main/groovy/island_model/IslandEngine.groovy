@@ -7,7 +7,7 @@ import jcsp.lang.Channel
 
 class IslandEngine  {
 
-  ProblemSpecification problemSpecification
+  IslandProblemSpecification problemSpecification
   int instances
   int nodes
   IslandTopology topology
@@ -22,7 +22,7 @@ class IslandEngine  {
     def ic2Nodes = new ChannelOutputList(icToNodes)
     def nodes2IC = new ChannelInputList((nodesToIC))
 
-    def emit = new EmitProblem( problemSpecification: problemSpecification,
+    def emit = new IslandEmitProblem( problemSpecification: problemSpecification,
         instances: instances,
         doSeedModify: doSeedModify,
         output: emitToIC.out())
@@ -33,7 +33,7 @@ class IslandEngine  {
         topology: topology,
         nodes: nodes,
         fromNodes: nodes2IC)
-    def collect = new CollectSolution(input: icToCollect.in(),
+    def collect = new IslandCollectSolution(input: icToCollect.in(),
         printWriter: printWriter,
         instances: instances)
 

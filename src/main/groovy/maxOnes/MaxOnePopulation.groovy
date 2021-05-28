@@ -1,15 +1,17 @@
 package maxOnes
 
 import island_model.Individual
-import island_model.Population
+import island_model.IslandPopulation
 
-class MaxOnePopulation implements Population{
+class MaxOnePopulation implements IslandPopulation{
   int individuals
   List <Individual> population
   int geneLength
   double crossoverProbability
   double mutateProbability
   String dataFileName
+  List evaluateData
+  BigDecimal convergenceLimit
   int nodeID
   Random rng
 
@@ -18,6 +20,7 @@ class MaxOnePopulation implements Population{
                     double crossoverProbability,
                     double mutateProbability,
                     String dataFileName,
+                    BigDecimal convergenceLimit,
                     Random rng, int nodeID) {
     this.individuals = individuals
     this.rng = rng
@@ -25,6 +28,7 @@ class MaxOnePopulation implements Population{
     this.crossoverProbability = crossoverProbability
     this.mutateProbability = mutateProbability
     this.dataFileName = dataFileName
+    this.convergenceLimit = convergenceLimit
     population = []
     this.nodeID = nodeID
     for ( i in 0 ..< individuals){
@@ -137,8 +141,8 @@ class MaxOnePopulation implements Population{
       offspring[0].mutate(rng)
     if (rng.nextDouble() < mutateProbability)
       offspring[1].mutate(rng)
-    offspring[0].evaluateFitness()
-    offspring[1].evaluateFitness()
+    offspring[0].evaluateFitness(evaluateData)
+    offspring[1].evaluateFitness(evaluateData)
     // order offspring so index 0 is the better
     if (offspring[1].getFitness() > offspring[0].getFitness()) offspring.swap(0,1)
     // possible overwrites are already so ordered
@@ -193,13 +197,37 @@ class MaxOnePopulation implements Population{
   }
 
   @Override
-  Individual convergence() {
+  Individual convergence(BigDecimal convergenceLimit) {
+    // convergenceLimit is not used
     int p = 0
-    while ((p < individuals) && (population[p].getFitness() < geneLength)) p = p+1
+    while ((p < individuals) && (population[p].getFitness() < convergenceLimit)) p = p+1
     if ( p < individuals)
       return population[p]  // the individual that has converged
     else
       return null
+  }
+
+  /**
+   * bestSolution is used to find the individual that has the best solution once the
+   * maximum number of generations has been exceeded.  It does not require knowledge of
+   * the convergence criteria as it is based solely on the relative values of Individual.fitness
+   * @return the individual that has the best solution
+   */
+  @Override
+  Individual bestSolution() {
+    int p
+    BigDecimal currentBest = population[0].getFitness()
+    int currentIndex = 0
+    p = 1
+    while (p < individuals) {
+      if (population[p].getFitness() > currentBest){ // this is a maximisation problem
+        // this is a maximisation problem
+        currentBest = population[p].getFitness()
+        currentIndex = p
+      }
+      p = p + 1
+    }
+    return population[currentIndex]
   }
 
   @Override
@@ -208,5 +236,7 @@ class MaxOnePopulation implements Population{
       println "Processing data file $dataFileName"
       // process the data file into a user defined data structure
     }
+    else
+      evaluateData = null
   }
 }

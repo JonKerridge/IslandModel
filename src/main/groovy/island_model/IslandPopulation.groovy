@@ -22,8 +22,9 @@ package island_model
  * @processDataFile if the application requires a data file, for
  * example TSP needs a set of cities and distances, then this method is used
  * to read the file with the path dataFileName. The dataFileName is null if no data file is required.
+ * @convergenceLimit the value used, if required, to determine convergence
  */
-interface Population {
+interface IslandPopulation {
 
   List <Individual> population // to hold the list of individuals
   List <Integer> selectParents()
@@ -55,10 +56,22 @@ interface Population {
    */
   void includeImmigrants(List <Individual> incomers, List <Integer> migrantIndices)
   /**
-   *
+   * @param convergenceLimit the value used to determine if convergence as occurred
    * @return the Individual that has satisfied the convergence criteria or null otherwise
    */
-  Individual convergence ()
+  Individual convergence (BigDecimal convergenceLimit)
+  /**
+   * bestSolution is used to find the individual that has the best solution once the
+   * maximum number of generations has been exceeded.  It does not require knowledge of
+   * the convergence criteria as it is based solely on the relative values of Individual.fitness
+   * @return the individual that has the best solution within maxGenerations
+   */
+  Individual bestSolution()
+  /**
+   * processDataFile used to read content of file with name dataFilename
+   * and place them into an List object within population used in the
+   * Individual evaluateFitness method
+   */
   void processDataFile ()
 
 }

@@ -1,7 +1,7 @@
 package maxOnes
 
 import island_model.IslandEngine
-import island_model.ProblemSpecification
+import island_model.IslandProblemSpecification
 
 //int nodes = 8
 int geneLength = 512
@@ -22,7 +22,7 @@ List <Integer> migrationFactor = [6, 12, 24]  // 96 per node
 
 
 
-def maxOnesSpecification = new ProblemSpecification()
+def maxOnesSpecification = new IslandProblemSpecification()
 
 maxOnesSpecification.nodes = 0
 maxOnesSpecification.instances = instances
@@ -36,6 +36,8 @@ maxOnesSpecification.crossoverPoints = 1
 maxOnesSpecification.maxGenerations = 10000
 maxOnesSpecification.crossoverProbability = 1.0
 maxOnesSpecification.mutationProbability = 0.0
+maxOnesSpecification.convergenceLimit = geneLength
+maxOnesSpecification.minOrMax = "MAX"
 maxOnesSpecification.doSeedModify = true
 // seeds chosen such that 100 instances can be run consecutively without
 // any seed being repeated, assuming seeds incremented by 2 for each new instance
@@ -67,6 +69,4 @@ for ( n in 0 ..< nodeFactor.size()) {
   }
 }
 
-printWriter.flush()
-printWriter.close()
 

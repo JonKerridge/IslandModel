@@ -20,7 +20,7 @@ class IslandNode implements CSProcess{
   void run(){
 //    println "Node $nodeID invoked"
     for ( i in 0 ..< instances){
-      ProblemSpecification spec = fromCoordinator.read() as ProblemSpecification
+      IslandProblemSpecification spec = fromCoordinator.read() as IslandProblemSpecification
       int instance = spec.instance
       assert instance == i : "Mismatch between Node instance value and local counter"
       int migrationInterval = spec.migrationInterval
@@ -29,15 +29,18 @@ class IslandNode implements CSProcess{
       int maxGenerations = spec.maxGenerations
       double crossoverProbability = spec.crossoverProbability
       double mutationProbability = spec.mutationProbability
+      BigDecimal convergenceLimit = spec.convergenceLimit
       rng = new Random(spec.seeds[nodeID])
 //      println "IN: created rng for node $nodeID with seed ${spec.seeds[nodeID]}"
       //create a population and its individuals
       Class popClass = Class.forName(spec.populationClass)
-      Population pop = popClass.newInstance(spec.populationPerNode,
+      IslandPopulation pop = popClass.newInstance(spec.populationPerNode,
           spec.geneLength,
           spec.crossoverProbability,
           spec.mutationProbability,
-          spec.dataFileName, rng, nodeID)
+          spec.dataFileName,
+          spec.convergenceLimit,
+          rng, nodeID)
       Individual foundIndividual
       ConvergedRecord convergent = null
       int generation = 0
@@ -50,7 +53,7 @@ class IslandNode implements CSProcess{
         if (rng.nextDouble() < crossoverProbability) {
           pop.reproduce(crossoverPoints)
         }
-        foundIndividual = pop.convergence()
+        foundIndividual = pop.convergence(convergenceLimit)
         if ( foundIndividual != null) {
           converged = true
           // record the details of the found individual
@@ -108,7 +111,8 @@ class IslandNode implements CSProcess{
       // terminated due to another node converging
       if (( ! terminated) && (! converged))
           // have definitely exceeded maxGenerations
-          toCoordinator.write (new TerminateRecord(terminate: true))
+          toCoordinator.write (new TerminateRecord(terminate: true, bestSolution: pop.bestSolution()))
+          // TODO send the best solution to IslandCoordinator as part of the TerminateRecord
       //println "Node $nodeID instance $i terminated $converged, $terminated"
     }  // each instance
     //println "Node $nodeID terminated"

@@ -13,7 +13,7 @@ class MaxOneIndividual implements Individual{
     chromosome = []
     for (g in 0 ..< geneLength)
       chromosome << (Integer) rng.nextInt(2)
-    evaluateFitness()
+    evaluateFitness(null)
   }
 
   // used to create an Individual with empty chromosome
@@ -25,7 +25,7 @@ class MaxOneIndividual implements Individual{
   }
 
   @Override
-  void evaluateFitness() {
+  void evaluateFitness(List data) {
     fitness = 0
     for ( g in 0 ..< geneLength) {
       fitness = fitness + chromosome[g]
@@ -36,6 +36,11 @@ class MaxOneIndividual implements Individual{
   void mutate(Random rng) {
     int subscript = rng.nextInt(geneLength)
     chromosome[subscript] = 1 - chromosome[subscript]
+  }
+
+  @Override
+  List <Integer> getSolution() {
+    return chromosome
   }
 
   @Override

@@ -18,12 +18,12 @@ class IslandCoordinator implements CSProcess{
 //    println "IC: starting $instances, $nodes"
     for ( i in 0 ..< instances) {
       int migrationCounter = 0
-      ProblemSpecification spec = input.read() as ProblemSpecification
+      IslandProblemSpecification spec = input.read() as IslandProblemSpecification
       output.write(spec)  // sent to collect process
 //      println "IC - intance  $i : read and written the spec"
       for (n in 0..< nodes) {
         // need to send a distinct copy of the spec to each node
-        ProblemSpecification nodeSpec = spec.copySpecification()
+        IslandProblemSpecification nodeSpec = spec.copySpecification()
         toNodes[n].write(nodeSpec)
       }
       // at this point the code iterates until convergence or maxGenerations exceeded
@@ -58,12 +58,13 @@ class IslandCoordinator implements CSProcess{
           }
           output.write(convergedData)
           // now terminate the nodes wanting to migrate
+          // if the remaining nodes want to Terminate then they will already have stopped
+          // processing this instance.  This will only happen if convergence occurs after
+          // the last possible migration phase before termination; in this case migratingIndices
+          // will be empty
           migratingIndices.each {
             toNodes[it].write(new TerminateRecord(terminate: false))
           }
-          // if the remaining nodes want to Terminate then they will already have stopped
-          // processing this instance.  This will only happen if convergence occurs after
-          // the last possible migration phase before termination
           running = false
         }
         else  {
@@ -74,7 +75,13 @@ class IslandCoordinator implements CSProcess{
           if (terminatedIndices.size() == nodes) {
 //            println "IC : terminating"
             running = false
-            output.write([]) // informs collect that no convergence was found
+            // TODO modify so that the best solution is output even though convergence not reached
+            TerminationCollection terminationCollection = new TerminationCollection(bestRecords: [])
+            terminatedIndices.each{
+              terminationCollection.bestRecords << ((TerminateRecord) returns[it]).bestSolution
+            }
+//            println "IC: ${terminationCollection.bestRecords.size()} termination records"
+            output.write(terminationCollection) // informs collect that no convergence was found
           }
           else {
             // nodes wanting to do migration

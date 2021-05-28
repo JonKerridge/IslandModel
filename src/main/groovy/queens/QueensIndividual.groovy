@@ -19,7 +19,7 @@ class QueensIndividual implements Individual{
       int q2 = rng.nextInt(queens) + 1
       chromosome.swap(q1, q2)
     }
-    evaluateFitness()
+    evaluateFitness(null)
   }
 
   QueensIndividual(int queens){
@@ -28,7 +28,7 @@ class QueensIndividual implements Individual{
     for (g in 1 ..< geneLength) chromosome << 0
   }
   @Override
-  void evaluateFitness() {
+  void evaluateFitness(List evaluateData) {
 //    println "EF: $chromosome"
     // loops start at 1 because chromosome[0] is null
     List <Integer> leftDiagonal = []
@@ -69,6 +69,11 @@ class QueensIndividual implements Individual{
     while (column1 == column2) column2 = rng.nextInt(geneLength) + 1
 //    println "mutate: $column1, $column2"
     chromosome.swap(column1, column2)
+  }
+
+  @Override
+  List <Integer> getSolution() {
+    return chromosome
   }
 
   @Override

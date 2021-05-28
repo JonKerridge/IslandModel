@@ -80,6 +80,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\src\main\groovy\maxOnes\RunSingleProblem.groovy">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\src\main\groovy\queens\QueensPopulation.groovy">
           <value>
             <Attribute>
@@ -88,6 +95,20 @@
           </value>
         </entry>
         <entry key="\src\main\groovy\queens\RunQueens.groovy">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\groovy\queens\SingleProblemQueens.groovy">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\groovy\tsp\TSPIslandPopulation.groovy">
           <value>
             <Attribute>
               <option name="separator" value="," />

@@ -22,20 +22,24 @@ package island_model
  * if convergence has not been found
  * @param crossoverProbability the probability of a crossover operation taking place
  * @param mutationProbability the probability of a mutation taking place in a reproduction offspring
+ * @param convergenceLimit the value used to determine convergence
+ * @param minOrMax MIN = a minimisation or MAX = a maximisation problem
  * @param seeds the initial seeds used by each node for their random number generator (one per node)
+ * @param doSeedModify controls the modification of seeds for each instance
  *
  * @param nodes the number of nodes
  * @param instances the number of instances
  * these last two are for documentation only
  *
  */
-class ProblemSpecification {
-  String populationClass, dataFileName
+class IslandProblemSpecification {
+  String populationClass, dataFileName, minOrMax
   int instance, geneLength, populationPerNode
   int migrationInterval, migrationSize, crossoverPoints, maxGenerations
   double crossoverProbability, mutationProbability
   int nodes, instances
   boolean doSeedModify
+  BigDecimal convergenceLimit
   List <Long> seeds
 
   /**
@@ -54,8 +58,8 @@ class ProblemSpecification {
   /**
    * In several places a deep copy of the specification is required.
    */
-  ProblemSpecification copySpecification(){
-    ProblemSpecification ps = new ProblemSpecification()
+  IslandProblemSpecification copySpecification(){
+    IslandProblemSpecification ps = new IslandProblemSpecification()
     ps.instance = instance
     ps.populationClass = populationClass
     ps.dataFileName = dataFileName
@@ -67,8 +71,10 @@ class ProblemSpecification {
     ps.maxGenerations  = maxGenerations
     ps.crossoverProbability = crossoverProbability
     ps.mutationProbability = mutationProbability
+    ps.minOrMax = minOrMax
     ps.nodes = nodes
     ps.instances = instances
+    ps.convergenceLimit = convergenceLimit
     ps.seeds = []
     for ( s in 0 ..< seeds.size())
       ps.seeds[s] = seeds[s]
@@ -98,6 +104,6 @@ class ProblemSpecification {
   String toString() {
   return "$nodes, $instances, $populationPerNode, " +
       "$geneLength, $migrationInterval, $migrationSize, $crossoverPoints, " +
-      "$maxGenerations, $crossoverProbability, $mutationProbability, "
+      "$maxGenerations, $crossoverProbability, $mutationProbability, $convergenceLimit, $minOrMax, "
   }
 }

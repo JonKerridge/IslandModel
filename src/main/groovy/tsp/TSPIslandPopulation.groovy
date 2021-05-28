@@ -1,47 +1,44 @@
-package queens
+package tsp
 
 import island_model.Individual
-import island_model.Population
+import island_model.IslandPopulation
 
 
-
-class QueensPopulation implements Population{
-  List <QueensIndividual> population
+class TSPIslandPopulation implements IslandPopulation{
+  List <TSPindividual> population
   int individuals
   int geneLength
   double crossoverProbability
   double mutateProbability
   String dataFileName
+  BigDecimal convergenceLimit
+  List <List <Integer>> distances
   Random rng
   int nodeID, instance
 
-  QueensPopulation (int individuals,
-                    int geneLength,
-                    double crossoverProbability,
-                    double mutateProbability,
-                    String dataFileName,
-                    Random rng,
-                    int nodeId) {
+  TSPIslandPopulation(int individuals,
+                      int geneLength,
+                      double crossoverProbability,
+                      double mutateProbability,
+                      String dataFileName,
+                      BigDecimal convergenceLimit,
+                      Random rng,
+                      int nodeId){
     this.individuals = individuals
     this.rng = rng
     this.geneLength = geneLength
     this.crossoverProbability = crossoverProbability
     this.mutateProbability = mutateProbability
     this.dataFileName = dataFileName
+    this.convergenceLimit = convergenceLimit
     population = []
     this.nodeID = nodeId
-    for ( i in 1 .. individuals){
-      population << new QueensIndividual(geneLength, rng)
+    processDataFile() // must be done first so that it can bu used to evaluate individual fitness
+    for ( i in 0 ..< individuals){
+      population << new TSPindividual(geneLength, rng, distances)
     }
-//    int i = 0
-//    population.each{
-//      println "Node $nodeID individual $i: ${it.toString()}"
-//      i = i + 1
-//    }
-    processDataFile()
 
   }
-
 
   @Override
   List<Integer> selectParents() {
@@ -109,9 +106,9 @@ class QueensPopulation implements Population{
       }
     }
     return [worst, secondWorst]
-
   }
 
+  // methods used in the reproduce process
   static def FindSubscriptsOfBinA(List <Integer> a, List <Integer> b){
     // returns the subscripts in a where elements of b can be found
 //    print "\t\tFind $b in $a -> returns "
@@ -122,18 +119,18 @@ class QueensPopulation implements Population{
     return subscripts
   }
 
-  static def extractParts(Integer start, Integer end, QueensIndividual source){
+  static def extractParts(Integer start, Integer end, TSPindividual source){
     // copies source[start ]..< source[end] into result
     List<Integer> result = []
-    for ( i in start ..< end) result << source.chromosome[i]
+    for ( i in start ..< end) result << source.route[i]
     return result
   }
 
-  List <QueensIndividual> offspring
+  List <TSPindividual> offspring
 
   static def doMultiPointCrossover(List <List <Integer>>  partsOf1,
                                    List <List <Integer>>  partsOf2,
-                                   QueensIndividual child,
+                                   TSPindividual child,
                                    int crossoverPoints){
     /*
     the number of crossover Points is even
@@ -181,53 +178,56 @@ class QueensPopulation implements Population{
     }
     /* now rebuild the replacement child by appending the now modified even subsections of partsOf1
     and the unaltered subsections of partsOf2 in sequence.
-    The parts are appended to a null value as the zeroth element of a board is always null
-    The final updated version of the individual's board is obtained by flatten()ing
+    The parts are appended to a 1 value as the zeroth element of a route is always 1
+    The final updated version of the individual's route is obtained by flatten()ing
      */
-    child.chromosome = [null]
+    child.route = [1]
     bitOf1 = 0
     bitOf2 = 0
     while ( bitOf1 < crossoverPoints) {
-      child.chromosome << (partsOf1[bitOf1] )
-      child.chromosome << (partsOf2[bitOf2] )
+      child.route << (partsOf1[bitOf1] )
+      child.route << (partsOf2[bitOf2] )
       bitOf1 = bitOf1 + 2
       bitOf2++
     }
-    child.chromosome << (partsOf1[crossoverPoints] )
-    child.chromosome = child.chromosome.flatten()
+    child.route << (partsOf1[crossoverPoints] )
+    child.route << 1  // last city is always 1
+    child.route = child.route.flatten() as List<Integer>
 //    child.evaluateFitness() // for printing only?
 //    println "\nChild $child "
   }
 
-  void replace (int popIndex, QueensIndividual replacement){
-    for ( g in 1 .. geneLength)
-      ((QueensIndividual)population[popIndex]).chromosome[g] = replacement.chromosome[g]
-    population[popIndex].evaluateFitness()
+  void replace (int popIndex, TSPindividual replacement){
+    for ( g in 0 .. geneLength)
+      ((TSPindividual)population[popIndex]).route[g] = replacement.route[g]
+    ((TSPindividual)population[popIndex]).fitness = replacement.fitness
   }
 
+
+  /**
+   *
+   * @param crossoverPoints the number of crossover points in the reproduction algorithm
+   * assuming the method is sufficiently flexible
+   */
   @Override
-  void reproduce(int crossoverPoints) {
+  void reproduce(int crossoverPoints) { // crossoverPoints must be even
+    assert crossoverPoints % 2 == 0 : "Reproduce: crossover points must be even = $crossoverPoints"
     List <Integer> parents = selectParents()
-    parents.each{
-      //println "$nodeID - parent $it: ${population[it].toString()}"
-    }
     List <Integer> possibleOverwrites = selectLeastFit()
-    possibleOverwrites.each{
-      //println "$nodeID - possible $it: ${population[it].toString()}"
-    }
-    List <Integer> randoms = [1]  // first queen is in location 1 of board
+    // must ensure crossover points are not 0 and cities, which are both fixed at 1
+    List <Integer> randoms = [1]  // first flexible city is in route[1]
     for (n in 1 .. crossoverPoints ){
-      int c = rng.nextInt(geneLength) + 1
-      while ( randoms.contains(c)) c = rng.nextInt(geneLength) + 1
+      int c = rng.nextInt(geneLength-1) + 1
+      while ( randoms.contains(c)) c = rng.nextInt(geneLength-1) + 1
       randoms << c
     }
-    randoms << geneLength + 1
     randoms = randoms.sort()
-    // randoms contains a sorted list of random points between the first  queen and the
-    // end of the board  offspring holds the results of the reproduction
+    randoms << geneLength - 1// last city is always 1 and must be ignored
+//    println "random points is $randoms"
+    // randoms contains a sorted list of random points
+    //offspring holds the results of the reproduction
     offspring = []
-    for ( i in 0 .. 1) offspring[i] = new QueensIndividual(geneLength)
-    // determine parts to be crossed over
+    for ( i in 0 .. 1) offspring[i] = new TSPindividual(geneLength, distances)
     List <List <Integer>> partsOf1 = []   // all the parts of first parent
     for ( i in 0 .. crossoverPoints){
       partsOf1[i] = extractParts(randoms[i], randoms[i+1], population[parents[0]])
@@ -266,8 +266,8 @@ class QueensPopulation implements Population{
       offspring[1].mutate(rng)
       //println "$nodeID - mutation 2 done"
     }
-    offspring[0].evaluateFitness()
-    offspring[1].evaluateFitness()
+    offspring[0].evaluateFitness(distances)
+    offspring[1].evaluateFitness(distances)
 
     // order offspring so index 0 is the better
     if (offspring[1].getFitness() < offspring[0].getFitness()) offspring.swap(0,1)
@@ -301,9 +301,14 @@ class QueensPopulation implements Population{
     else {
       //println "$nodeID - no overwrites possible"
     }
-
   }
 
+  /**
+   *
+   * @param migrationSize the number of migrants to be selected from the population
+   * @return a List of the subscripts of the Individuals in the population that
+   * have been selected for migration
+   */
   @Override
   List<Integer> selectMigrants(int migrationSize) {
     // return some randomly chosen individuals without any selection
@@ -316,6 +321,11 @@ class QueensPopulation implements Population{
     return migrants
   }
 
+  /**
+   *
+   * @param migrantIndices the subscripts of the population Individuals to be migrated
+   * @return a List containing the selected Individuals
+   */
   @Override
   List<Individual> getMigrants(List<Integer> migrantIndices) {
     List <Individual> migrants
@@ -325,28 +335,73 @@ class QueensPopulation implements Population{
     return migrants
   }
 
+  /**
+   *
+   * @param incomers a List of Individuals that are immigrating into this population
+   * @param migrantIndices the subscripts in the population where the immigrant incomers
+   * s are to be located
+   */
   @Override
   void includeImmigrants(List<Individual> incomers, List<Integer> migrantIndices) {
     assert incomers.size() == migrantIndices.size() : "includeImmigrants: Mismatch in sizes of input Lists"
     for ( m in 0 ..< migrantIndices.size())
-      population[migrantIndices[m]] = incomers[m] as QueensIndividual
+      population[migrantIndices[m]] = incomers[m] as TSPindividual
   }
 
+  /**
+   *
+   * @return the Individual that has satisfied the convergence criteria or null otherwise
+   */
   @Override
-  Individual convergence() {
+  Individual convergence(BigDecimal convergenceLimit) {
     int p = 0
-    while ((p < individuals) && (population[p].getFitness() != 0.0)) p = p+1
+    while ((p < individuals) && (population[p].getFitness() > convergenceLimit)) p = p+1
     if ( p < individuals)
       return population[p]  // the individual that has converged
     else
       return null
   }
 
+  /**
+   * bestSolution is used to find the individual that has the best solution once the
+   * maximum number of generations has been exceeded.  It does not require knowledge of
+   * the convergence criteria as it is based solely on the relative values of Individual.fitness
+   * @return the individual that has the best solution within maxGenerations
+   */
+  @Override
+  Individual bestSolution() {
+    int bestLocation = 0
+    BigDecimal bestFit = population[bestLocation].getFitness()
+    for ( i in 1 ..< individuals){
+      if (population[i].getFitness() < bestFit){
+        bestFit = population[i].getFitness()
+        bestLocation = i
+      }
+    }
+    return population[bestLocation]
+  }
+
   @Override
   void processDataFile() {
-    if (dataFileName != null){
-      println "Processing data file $dataFileName"
-      // process the data file into a user defined data structure
+//    println "process $dataFileName"
+    distances = []
+    distances[0] = [0]  // no city with subscript 0
+    int row
+    row = 1
+    new File(dataFileName).eachLine {line ->
+//      println "$line"
+      distances[row]= [0]
+      List <String> values = line.tokenize(',')
+      for ( v in 0 ..< values.size()) distances[row][v+1] = Integer.parseInt(values[v])
+      row += 1
     }
+    int rows = distances.size()
+    for ( r in 1 ..< rows)
+      for ( rc in r+1 ..< rows)
+        distances[r][rc] = distances[rc][r]
+
+//    println "\nSquare : $rows\n"
+//    distances.each{println "$it"}
+
   }
 }
