@@ -9,11 +9,12 @@ package mainland_model
  * The public constructor for the population class must initialise all the properties
  *
  * @param populationClass the name of the class that implements the problem's population object
+ * @param individualClass the name of the class that implements the problem's individual object
  * @param dataFileName the name of a file that holds data required by the application, for example,
  * in a TSP application it would hold the distance matrix, null if not required
  * @param instance the run number of the problem to be sent for solution (modified in EmitProblem)
  * @param geneLength the number of genes in a chromosome
- * @param populationPerNode the number of individuals maintained by each node
+ * @param populationPerNode the number of population maintained by each node
  * @param crossoverPoints the number of crossover points to be used in reproduction
  * @param maxGenerations the maximum number of generations before the application is stopped
  * if convergence has not been found
@@ -30,7 +31,7 @@ package mainland_model
  */
 
 class MainlandProblemSpecification {
-  String populationClass, dataFileName, minOrMax
+  String populationClass, individualClass, dataFileName, minOrMax
   int instance, geneLength, populationPerNode
   int crossoverPoints, maxGenerations
   double crossoverProbability, mutationProbability
@@ -59,6 +60,7 @@ class MainlandProblemSpecification {
     MainlandProblemSpecification ps = new MainlandProblemSpecification()
     ps.instance = instance
     ps.populationClass = populationClass
+    ps.individualClass = individualClass
     ps.dataFileName = dataFileName
     ps.populationPerNode = populationPerNode
     ps.geneLength = geneLength

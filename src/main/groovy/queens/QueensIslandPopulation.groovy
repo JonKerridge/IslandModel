@@ -51,7 +51,7 @@ class QueensIslandPopulation implements IslandPopulation{
   List<Integer> selectParents() {
     int best, secondBest
     BigDecimal bestFitness, secondBestFitness
-    // initialise the search for the best two parent individuals
+    // initialise the search for the best two parent population
     // this is a minimisation problem
     bestFitness = population[0].getFitness()
     best = 0
@@ -309,7 +309,7 @@ class QueensIslandPopulation implements IslandPopulation{
 
   @Override
   List<Integer> selectMigrants(int migrationSize) {
-    // return some randomly chosen individuals without any selection
+    // return some randomly chosen population without any selection
     List <Integer> migrants = []
     for ( i in 0 ..< migrationSize){
       int index = rng.nextInt(individuals)

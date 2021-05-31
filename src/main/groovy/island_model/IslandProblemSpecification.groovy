@@ -14,9 +14,9 @@ package island_model
  * in a TSP application it would hold the distance matrix, null if not required
  * @param instance the run number of the problem to be sent for solution (modified in EmitProblem)
  * @param geneLength the number of genes in a chromosome
- * @param populationPerNode the number of individuals maintained by each node
+ * @param populationPerNode the number of population maintained by each node
  * @param migrationInterval the number of generations between each migration/immigration phase
- * @param migrationSize the number of individuals to be chosen during migration phase
+ * @param migrationSize the number of population to be chosen during migration phase
  * @param crossoverPoints the number of crossover points to be used in reproduction
  * @param maxGenerations the maximum number of generations before the application is stopped
  * if convergence has not been found

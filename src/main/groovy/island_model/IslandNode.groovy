@@ -15,9 +15,10 @@ class IslandNode implements CSProcess{
   ChannelOutput toCoordinator
   int nodeID
   int instances
-  Random rng
 
   void run(){
+    Random rng
+
 //    println "Node $nodeID invoked"
     for ( i in 0 ..< instances){
       IslandProblemSpecification spec = fromCoordinator.read() as IslandProblemSpecification
@@ -32,7 +33,7 @@ class IslandNode implements CSProcess{
       BigDecimal convergenceLimit = spec.convergenceLimit
       rng = new Random(spec.seeds[nodeID])
 //      println "IN: created rng for node $nodeID with seed ${spec.seeds[nodeID]}"
-      //create a population and its individuals
+      //create a population and its population
       Class popClass = Class.forName(spec.populationClass)
       IslandPopulation pop = popClass.newInstance(spec.populationPerNode,
           spec.geneLength,

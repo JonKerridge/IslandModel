@@ -41,7 +41,7 @@ class MaxOnePopulation implements IslandPopulation{
   List <Integer> selectParents() {
     int best, secondBest
     BigDecimal bestFitness, secondBestFitness
-    // initialise the search for the best two parent individuals
+    // initialise the search for the best two parent population
     bestFitness = population[0].getFitness()
     best = 0
     secondBestFitness = population[1].getFitness()
@@ -114,8 +114,8 @@ class MaxOnePopulation implements IslandPopulation{
 
   @Override
   void reproduce(int crossoverPoints) {
-    // select parents and potential individuals the offspring will replace
-    // pre-existing individuals replaced iff offspring are a better fit
+    // select parents and potential population the offspring will replace
+    // pre-existing population replaced iff offspring are a better fit
     // this version uses a single crossover point
     List <Integer> parents = selectParents()
     List <Integer> possibleOverwrites = selectLeastFit()
@@ -169,7 +169,7 @@ class MaxOnePopulation implements IslandPopulation{
 
   @Override
   List <Integer> selectMigrants(int migrationSize) {
-    // return some randomly chosen individuals without any selection
+    // return some randomly chosen population without any selection
     List <Integer> migrants = []
     for ( i in 0 ..< migrationSize){
       int index = rng.nextInt(individuals)
