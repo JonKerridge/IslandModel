@@ -3,12 +3,11 @@ package mainland_model
 import groovy_jcsp.ChannelInputList
 import groovy_jcsp.ChannelOutputList
 import groovy_jcsp.PAR
-import island_model.IslandNode
 import jcsp.lang.Channel
 
 class MainlandEngine {
 
-  int nodes, populationPerNode, instances
+  int nodes, instances
   boolean doSeedModify
   PrintWriter printWriter
   MainlandProblemSpecification problemSpecification
@@ -30,8 +29,6 @@ class MainlandEngine {
         instances: instances,
         output: rootToCollect.out(),
         toNodes: root2Nodes,
-        nodes: nodes,
-        populationPerNode: populationPerNode,
         fromNodes: nodes2Root)
     def collect = new MainlandCollectSolution(
         input: rootToCollect.in(),
