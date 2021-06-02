@@ -62,7 +62,8 @@ class MainlandRoot implements CSProcess{
   void run() {
     int best, worst
     int lastIndex, totalIndex, nodes, populationPerNode
-    String minOrMax
+    String minOrMax, dataFileName
+    List evaluateData
     for ( i in 0 ..< instances) {
       MainlandProblemSpecification specification = input.read() as MainlandProblemSpecification
       output.write(specification)
@@ -72,14 +73,17 @@ class MainlandRoot implements CSProcess{
       Class populationClass = Class.forName(specification.populationClass)
       Class individualClass = Class.forName(specification.individualClass)
       minOrMax = specification.minOrMax
-      MainlandPopulation populationData = populationClass.newInstance()
+      dataFileName = specification.dataFileName
+
+
+      MainlandPopulation populationData = populationClass.getDeclaredConstructor().newInstance()
 
       // determine population indices
       lastIndex = (nodes * populationPerNode) -1
       totalIndex = lastIndex + (nodes*2)
 
       for (n in 0 ..< nodes) {
-        toNodes[n].write(specification, populationData)
+        toNodes[n].write(specification, populationData, evaluateData)
       }
 
 

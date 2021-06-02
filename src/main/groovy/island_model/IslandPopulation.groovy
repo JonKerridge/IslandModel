@@ -26,7 +26,7 @@ package island_model
  */
 interface IslandPopulation {
 
-  List <Individual> population // to hold the list of population
+  List <Individual> population // to hold the list of Individuals that form the population
   int individuals
   int geneLength
   double crossoverProbability

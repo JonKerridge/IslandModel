@@ -3,7 +3,12 @@ package mainland_model
 import island_model.Individual
 
 interface MainlandPopulation {
-  List <Individual> population // to hold the list of population
+  /**
+   * The user is required to write a constructor for any class using this interface.  The following
+   * properties of the constructor must be specified in the order given.
+   */
+
+  List <Individual> population // to hold the list of individuals that form the population
   /**
    *
    * @param crossoverPoints the number of crossover points in the reproduction algorithm
