@@ -5,18 +5,18 @@ import island_model.IslandProblemSpecification
 
 def maxOnesSpecification = new IslandProblemSpecification()
 
-maxOnesSpecification.nodes = 4
+maxOnesSpecification.nodes = 8
 maxOnesSpecification.instances = 10
 maxOnesSpecification.dataFileName = null
 maxOnesSpecification.populationClass = MaxOnePopulation.getName()
-maxOnesSpecification.geneLength = 16
+maxOnesSpecification.geneLength = 512
 maxOnesSpecification.populationPerNode = 16
-maxOnesSpecification.migrationInterval = 16
+maxOnesSpecification.migrationInterval = 8
 maxOnesSpecification.migrationSize = 4
 maxOnesSpecification.crossoverPoints = 1
 maxOnesSpecification.maxGenerations = 10000
 maxOnesSpecification.crossoverProbability = 1.0
-maxOnesSpecification.mutationProbability = 0.8
+maxOnesSpecification.mutationProbability = 0.5
 maxOnesSpecification.convergenceLimit = maxOnesSpecification.geneLength
 maxOnesSpecification.minOrMax = "MAX"
 maxOnesSpecification.doSeedModify = true

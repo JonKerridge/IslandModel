@@ -7,12 +7,15 @@ import jcsp.lang.Channel
 
 class MainlandEngine {
 
-  int nodes, instances
-  boolean doSeedModify
-  PrintWriter printWriter
+  int nodes  // number of worker nodes
+  int instances  //number of different problems instances to be created from the same specification
+  PrintWriter printWriter  //output result written here
   MainlandProblemSpecification problemSpecification
 
   void run() {
+//    println "MainlandEngine running: $nodes, $instances"
+    assert instances > 0: "There must be at least one instance of the problem: specified $instances"
+    assert instances == problemSpecification.instances:"Property instances and Specification value must match"
     def emitToRoot = Channel.one2one()
     def rootToCollect = Channel.one2one()
     def rootToNodes = Channel.one2oneArray(nodes)
@@ -22,24 +25,25 @@ class MainlandEngine {
     def emit = new MainlandEmitProblem(
         problemSpecification: problemSpecification,
         instances: instances,
-        doSeedModify: doSeedModify,
         output: emitToRoot.out())
-    def root = new MainlandRoot(
-        input: emitToRoot.in(),
+    def root = new mainland_model.MainlandRoot(
         instances: instances,
+        input: emitToRoot.in(),
         output: rootToCollect.out(),
         toNodes: root2Nodes,
         fromNodes: nodes2Root)
     def collect = new MainlandCollectSolution(
+        instances: instances,
         input: rootToCollect.in(),
-        printWriter: printWriter,
-        instances: instances)
+        printWriter: printWriter)
     def nodeProcesses = (0 ..< nodes).collect() { i ->
-      return new MainlandNode(fromRoot: rootToNodes[i].in(),
+      return new mainland_model.MainlandNode(
+          instances: instances,
+          fromRoot: rootToNodes[i].in(),
           toRoot: nodesToRoot[i].out(),
-          nodeID: i,
-          instances: instances )
+          nodeID: i)
     }
     new PAR(nodeProcesses + [emit, root, collect] ).run()
+//    println "MainlandEngine terminating"
   }
 }

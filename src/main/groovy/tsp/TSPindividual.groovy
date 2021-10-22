@@ -36,6 +36,11 @@ class TSPindividual implements Individual{
   }
 
   @Override
+  void initialise(Random rng) {
+
+  }
+
+  @Override
   void evaluateFitness(List evaluateData) {
     fitness = 0
     for ( int i in 1 .. cities){

@@ -4,23 +4,36 @@ import island_model.Individual
 
 interface MainlandPopulation {
   /**
-   * The user is required to write a constructor for any class using this interface.  The following
-   * properties of the constructor must be specified in the order given.
+   * The user is required to write a constructor for any class using this interface.
    */
 
-  List <Individual> population // to hold the list of individuals that form the population
+  List <Individual> population
+
   /**
+   * The parameters are all subscripts of individuals in the population List
+   * @param parent1
+   * @param parent
+   * @param child1
+   * @param child2
+   * @param candidate1
+   * @param candidate2
+   * @param rng the random number generator to be used,l specific to each node
    *
-   * @param crossoverPoints the number of crossover points in the reproduction algorithm
-   * assuming the method is sufficiently flexible
    */
-  void reproduce(int crossoverPoints)
+  void reproduce(
+      int parent1,
+      int parent,
+      int child1,
+      int child2,
+      int candidate1,
+      int candidate2,
+      Random rng)
 
   /**
    * @param convergenceLimit the value used to determine if convergence as occurred
    * @return the Individual that has satisfied the convergence criteria or null otherwise
    */
-  Individual convergence (BigDecimal convergenceLimit)
+  Individual convergence ()
 
   /**
    * bestSolution is used to find the individual that has the best solution once the
@@ -32,7 +45,7 @@ interface MainlandPopulation {
 
   /**
    * processDataFile used to read content of file with name dataFilename
-   * and place them into an List object within population used in the
+   * and place them into the List object evaluateData within population used in the
    * Individual evaluateFitness method
    */
   void processDataFile ()

@@ -32,10 +32,9 @@ package mainland_model
 
 class MainlandProblemSpecification {
   String populationClass, individualClass, dataFileName, minOrMax
-  int instance, geneLength, populationPerNode
-  int crossoverPoints, maxGenerations
+  int instance, geneLength, populationPerNode, nodes, instances
+  int crossoverPoints, maxGenerations, replaceInterval
   double crossoverProbability, mutationProbability
-  int nodes, instances
   boolean doSeedModify
   BigDecimal convergenceLimit
   List <Long> seeds
@@ -66,6 +65,7 @@ class MainlandProblemSpecification {
     ps.geneLength = geneLength
     ps.crossoverPoints = crossoverPoints
     ps.maxGenerations  = maxGenerations
+    ps.replaceInterval = replaceInterval
     ps.crossoverProbability = crossoverProbability
     ps.mutationProbability = mutationProbability
     ps.minOrMax = minOrMax
@@ -83,7 +83,7 @@ class MainlandProblemSpecification {
     return "$nodes, $instances, $populationPerNode, " +
         "$geneLength, $crossoverPoints, " +
         "$maxGenerations, $crossoverProbability, " +
-        "$mutationProbability, $convergenceLimit, $minOrMax, "
+        "$mutationProbability, $convergenceLimit, $minOrMax, $seeds"
   }
 
 }

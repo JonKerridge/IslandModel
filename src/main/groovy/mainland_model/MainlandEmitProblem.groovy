@@ -17,10 +17,11 @@ class MainlandEmitProblem implements CSProcess{
   MainlandProblemSpecification problemSpecification
   ChannelOutput output
   int instances
-  boolean doSeedModify
 
   void run(){
+    boolean doSeedModify = problemSpecification.doSeedModify
     for ( i in 0 ..< instances) {
+//      println "Emit sending instance $i"
       MainlandProblemSpecification ps = problemSpecification.copySpecification()
       ps.instance = i
       output.write(ps)

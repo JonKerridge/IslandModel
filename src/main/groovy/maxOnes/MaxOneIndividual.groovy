@@ -25,6 +25,11 @@ class MaxOneIndividual implements Individual{
   }
 
   @Override
+  void initialise(Random rng) {
+
+  }
+
+  @Override
   void evaluateFitness(List data) {
     fitness = 0
     for ( g in 0 ..< geneLength) {
@@ -51,7 +56,7 @@ class MaxOneIndividual implements Individual{
   @Override
   public String toString() {
     return "MaxOneIndividual{" + "fitness=" + fitness +
-        ", chromosome=" + chromosome +
+//        ", chromosome=" + chromosome +
         ", geneLength=" + geneLength + '}';
   }
 }

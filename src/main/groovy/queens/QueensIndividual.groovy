@@ -27,6 +27,12 @@ class QueensIndividual implements Individual{
     chromosome = [null]
     for (g in 1 ..< geneLength) chromosome << 0
   }
+
+  @Override
+  void initialise(Random rng) {
+
+  }
+
   @Override
   void evaluateFitness(List evaluateData) {
 //    println "EF: $chromosome"

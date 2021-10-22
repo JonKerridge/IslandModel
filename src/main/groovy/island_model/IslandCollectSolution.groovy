@@ -59,7 +59,7 @@ class IslandCollectSolution implements CSProcess{
           }
         outString = outString +  " ${solutions.size()}, " +
             "${solutions[minSolution].convergedIndividual.getFitness()}, " +
-            "${solutions[minSolution].convergedIndividual.getSolution()}, " +
+//            "${solutions[minSolution].convergedIndividual.getSolution()}, " +
             "${solutions[minSolution].generationsTaken}, " +
             "${solutions[minSolution].seedValue}, " +
             "${endTime - startTime} "

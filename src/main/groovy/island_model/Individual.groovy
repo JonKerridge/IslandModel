@@ -20,6 +20,8 @@ package island_model
  */
 interface Individual {
 
+  void initialise(Random rng)
+
   /**
    *
    * calculates the fitness value(s) of an individual

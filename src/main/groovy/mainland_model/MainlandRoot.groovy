@@ -14,7 +14,7 @@ class MainlandRoot implements CSProcess{
   ChannelOutput output
   ChannelOutputList toNodes
   ChannelInputList fromNodes
-  int instances
+  int instances //number of different problems instances to be created from the same specification
 
   int partition(List <Individual> m, int start, int end){
     BigDecimal pivotValue
@@ -60,34 +60,105 @@ class MainlandRoot implements CSProcess{
   }
 
   void run() {
-    int best, worst
-    int lastIndex, totalIndex, nodes, populationPerNode
+//    println "Root process starting $instances"
+    int bestFitIndex, lastIndex, totalIndex, nodes, populationPerNode
     String minOrMax, dataFileName
     List evaluateData
-    for ( i in 0 ..< instances) {
+    // now process each instance of the problem
+    for ( i in 0 ..< instances){
       MainlandProblemSpecification specification = input.read() as MainlandProblemSpecification
-      output.write(specification)
-      // obtain values from specification
-      nodes = specification.nodes
-      populationPerNode = specification.populationPerNode
+//      println "Root has read specification $i"
+      output.write(specification)   // to the Mainland Collect Solution process every instance
+      if (i == 0){
+//        println "Root processing specification 0"
+        // obtain non-changing values from specification
+        nodes = specification.nodes
+        populationPerNode = specification.populationPerNode
+        assert populationPerNode >= 4:"Population Per Node must be at least 4; $populationPerNode specified"
+        minOrMax = specification.minOrMax
+        // determine population indices
+        lastIndex = (nodes * populationPerNode) -1
+        totalIndex = lastIndex + (nodes*2)
+        if (minOrMax  =="MIN")
+          bestFitIndex = 0
+        else
+          bestFitIndex = totalIndex
+//        println "Root: fixed values $nodes, $populationPerNode, $minOrMax, $lastIndex, $totalIndex, $bestFitIndex"
+      } // end of initialisation
+      // now create an empty population
       Class populationClass = Class.forName(specification.populationClass)
       Class individualClass = Class.forName(specification.individualClass)
-      minOrMax = specification.minOrMax
+      MainlandPopulation populationData = populationClass.newInstance(
+          totalIndex + 1 ,  // the number of individuals that are created
+          specification.geneLength,
+          specification.crossoverPoints,
+          specification.maxGenerations,
+          specification.replaceInterval,
+          specification.crossoverProbability,
+          specification.mutationProbability,
+          specification.dataFileName,
+          specification.convergenceLimit,
+          bestFitIndex
+      )
+      // now read in the fitness evaluation data if any
       dataFileName = specification.dataFileName
-
-
-      MainlandPopulation populationData = populationClass.getDeclaredConstructor().newInstance()
-
-      // determine population indices
-      lastIndex = (nodes * populationPerNode) -1
-      totalIndex = lastIndex + (nodes*2)
-
+      // read in the data file to evaluateData iff first iteration
+      if (i == 0) populationData.processDataFile()
+      //create the empty individual entries in populationData
+      for (p in 0 ..< totalIndex)
+        populationData.population[p] = individualClass.newInstance(specification.geneLength)
+//      println "Root: writing to nodes to initialise instance $i"
       for (n in 0 ..< nodes) {
-        toNodes[n].write(specification, populationData, evaluateData)
+        toNodes[n].write([specification, populationData, evaluateData])
       }
-
-
-    }
-
-  }
+      for (n in 0 ..< nodes) {
+        fromNodes[n].read() // a signal that initialisation is complete
+      }
+      // can now sort the initial population
+      quickSort(populationData.population, totalIndex)
+//      println "Root: nodes initialised for instance $i"
+//      int indiv = 0
+//      populationData.population.each {println " $indiv: $it"
+//        indiv = indiv + 1
+//      }
+//      println "End of population for instance $i"
+      // now interact with nodes until convergence
+      int generationCount, replaceCount, replacements
+      Individual result
+      generationCount = 0
+      replaceCount = 0
+      replacements = 0
+      while (( (result = populationData.convergence()) == null ) && (generationCount < specification.maxGenerations)){
+        if (replaceCount == specification.replaceInterval){
+          for (n in 0 ..< nodes) {
+            toNodes[n].write("REPLACE")
+          }
+          for (n in 0 ..< nodes) {
+            fromNodes[n].read() // a signal that replacement is complete
+          }
+          quickSort(populationData.population, totalIndex)  // sort the population
+          replaceCount = 0
+          replacements = replacements + 1
+        }
+        generationCount = generationCount + 1
+        replaceCount = replaceCount + 1
+        for (n in 0 ..< nodes) {
+          toNodes[n].write("REPRODUCE")
+        }
+        for (n in 0 ..< nodes) {
+          fromNodes[n].read() // a signal that reproduction is complete
+        }
+        quickSort(populationData.population, totalIndex)  // sort the population
+      } //end while loop
+      // write outcome to CollectSolution
+      String outcome = "SUCCESS"
+      if (result == null) outcome = "FAILURE"
+      result.replacements = replacements
+      output.write([outcome, result, generationCount])
+      for (n in 0 ..< nodes) {
+        toNodes[n].write("FINISH")
+      }
+    }// for loop
+//    println "Root process terminating"
+  } // end run
 }
