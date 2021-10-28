@@ -9,17 +9,38 @@ class IslandCollectSolution implements CSProcess{
   int instances
   PrintWriter printWriter
 
+  double sd( List dataValues, double mean, int n){
+    double sum = 0.0
+    dataValues.each { v ->
+      sum = sum + (( v - mean) * ( v - mean))
+    }
+    sum = sum / n
+    return Math.sqrt(sum)
+  }
 
   void run(){
     String outString
+    IslandProblemSpecification spec
+    long totalTime
+    int totalGenerations
+    int n
+    List timeData
+    List genData
+    totalTime = 0
+    totalGenerations = 0
+    int minGenerations
+    n = 0
+    timeData = []
+    genData = []
     for ( i in 0 ..< instances) {
       // initially the CollectSolution process reads the problem specification
-      IslandProblemSpecification spec = input.read() as IslandProblemSpecification
+      spec = input.read() as IslandProblemSpecification
       long startTime = System.currentTimeMillis()
       // now read result
       Object result = input.read()
       long endTime = System.currentTimeMillis()
-      outString = "$i, spec, ${spec.toString()} result, "
+      long elapsed = endTime - startTime
+      outString = "$i, ${spec.toString()}, ->,"
       //TODO need to select the 'best' solution the one with the best Fitness value
       // but this varies with maximise or minimise problem
       if (result instanceof TerminationCollection) {
@@ -29,7 +50,7 @@ class IslandCollectSolution implements CSProcess{
         BigDecimal bestFit
         int bestLocation
         bestLocation = 0
-        bestFit = ((Individual)((TerminationCollection)result).bestRecords[bestLocation]).getFitness()
+        bestFit = ((IslandIndividual)((TerminationCollection)result).bestRecords[bestLocation]).getFitness()
         boolean better
         for ( r in 1 ..< ((TerminationCollection)result).bestRecords.size()) {
           better = spec.minOrMax == "MIN" ?
@@ -43,13 +64,14 @@ class IslandCollectSolution implements CSProcess{
 
         outString = outString + " NONE, " +
             "${((TerminationCollection)result).bestRecords[bestLocation].fitness}, " +
-            "${((Individual)((TerminationCollection)result).bestRecords[bestLocation]).getSolution()} , , ," +
-            " ${endTime - startTime}"
+            "${spec.maxGenerations}, "
+//            "${((IslandIndividual)((TerminationCollection)result).bestRecords[bestLocation]).getSolution()} , , ," +
+            " $elapsed"
       }
       else {
         // solution found but
         // more than one node might find a solution; we want minimum generations
-        int minGenerations = spec.maxGenerations + 1
+        minGenerations = spec.maxGenerations + 1
         int minSolution
         List <ConvergedRecord> solutions = result as List <ConvergedRecord>
         for ( s in 0 ..< solutions.size())
@@ -61,13 +83,29 @@ class IslandCollectSolution implements CSProcess{
             "${solutions[minSolution].convergedIndividual.getFitness()}, " +
 //            "${solutions[minSolution].convergedIndividual.getSolution()}, " +
             "${solutions[minSolution].generationsTaken}, " +
-            "${solutions[minSolution].seedValue}, " +
-            "${endTime - startTime} "
-      }
+//            "${solutions[minSolution].seedValue}, " +
+            "$elapsed"
+      } // end else
       println "$outString"
       printWriter.println(outString)
-    } // instances
+      if ( i > 0 ){
+        totalTime = totalTime + elapsed
+        timeData << elapsed
+        genData << minGenerations
+        totalGenerations = totalGenerations + minGenerations
+      }
+    } // end for loop for  instances
 //    println "CS: terminated"
+    n = instances - 1
+    double timeAverage = (double)totalTime / (double)n
+    double genAverage = (double)totalGenerations / (double)n
+    println " , ${spec.toString()} , " +
+        "$timeAverage, ${sd(timeData, timeAverage, n)}, " +
+        "$genAverage, ${sd(genData, genAverage, n)}, "
+    printWriter.println " , ${spec.toString()} , , , , , , ," +
+        "$timeAverage, ${sd(timeData, timeAverage, n)}, " +
+        "$genAverage, ${sd(genData, genAverage, n)}, "
+
     printWriter.flush()
     printWriter.close()
   } // run

@@ -1,4 +1,4 @@
-package tsp
+package queensIsland
 
 import groovy_jcsp.ChannelOutputList
 import island_model.IslandTopology

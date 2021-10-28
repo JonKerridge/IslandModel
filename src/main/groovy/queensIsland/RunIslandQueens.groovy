@@ -1,11 +1,11 @@
-package queens
+package queensIsland
 
 import island_model.IslandEngine
 import island_model.IslandProblemSpecification
 
 int nodes = 4
 
-int geneLength = 128                        // queens to be placed
+int geneLength = 128                        // queensIsland to be placed
 int instances = 10                          // 10 runs per combination
 int migrationInterval = 40
 int populationPerNode = 32
@@ -100,7 +100,7 @@ queens.each {q ->
 //
 //RingTopology topology = new RingTopology()
 //
-//String outFile = "./${geneLength}queens${populationPerNode}ppn${migrationInterval}mig.csv"
+//String outFile = "./${geneLength}queensIsland${populationPerNode}ppn${migrationInterval}mig.csv"
 //
 //File outputFile = new File(outFile)
 //if (outputFile.exists()) outputFile.delete()

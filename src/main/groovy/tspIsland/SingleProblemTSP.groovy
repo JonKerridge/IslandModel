@@ -1,4 +1,4 @@
-package tsp
+package tspIsland
 
 import island_model.IslandEngine
 import island_model.IslandProblemSpecification
@@ -11,7 +11,7 @@ def printWriter = outputFile.newPrintWriter()
 def tspSpecification = new IslandProblemSpecification()
 tspSpecification.nodes = 12
 tspSpecification.instances = 10
-tspSpecification.dataFileName = "./dantzig42.tsp"   // "./10cities.tsp"
+tspSpecification.dataFileName = "./dantzig42.tspIsland"   // "./10cities.tspIsland"
 tspSpecification.populationClass = TSPIslandPopulation.getName()
 tspSpecification.geneLength = 43 // 11
 tspSpecification.populationPerNode = 16

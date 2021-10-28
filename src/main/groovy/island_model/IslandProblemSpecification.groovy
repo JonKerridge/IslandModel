@@ -102,8 +102,11 @@ class IslandProblemSpecification {
 
   @Override
   String toString() {
-  return "$nodes, $instances, $populationPerNode, " +
-      "$geneLength, $migrationInterval, $migrationSize, $crossoverPoints, " +
-      "$maxGenerations, $crossoverProbability, $mutationProbability, $convergenceLimit, $minOrMax, "
+//    return "$nodes, $instances, $populationPerNode, " +
+//        "$geneLength, $migrationInterval, $migrationSize, $crossoverPoints, " +
+//        "$maxGenerations, $crossoverProbability, $mutationProbability, $convergenceLimit, $minOrMax, "
+    return "$nodes, $populationPerNode, " +
+        "$migrationInterval, $migrationSize, " +
+        "$crossoverProbability, $mutationProbability, "
   }
 }

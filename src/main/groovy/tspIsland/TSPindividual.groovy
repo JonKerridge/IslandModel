@@ -1,8 +1,8 @@
-package tsp
+package tspIsland
 
-import island_model.Individual
+import island_model.IslandIndividual
 
-class TSPindividual implements Individual{
+class TSPindividual implements IslandIndividual{
   int fitness
   List <Integer> route
   int cities
@@ -33,11 +33,6 @@ class TSPindividual implements Individual{
     route[0] = 1   // cities are subscripted from 1 upwards to cities-1
     route[cities] = 1
     for ( i in 1 ..< cities ) route[i] = 0  // just initialise, will be overwritten
-  }
-
-  @Override
-  void initialise(Random rng) {
-
   }
 
   @Override

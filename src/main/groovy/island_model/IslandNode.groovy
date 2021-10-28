@@ -42,7 +42,7 @@ class IslandNode implements CSProcess{
           spec.dataFileName,
           spec.convergenceLimit,
           rng, nodeID)
-      Individual foundIndividual
+      IslandIndividual foundIndividual
       ConvergedRecord convergent = null
       int generation = 0
       int migrationCount = 0
@@ -92,7 +92,7 @@ class IslandNode implements CSProcess{
               // have got some new immigrants to be incorporated
               assert returnedData instanceof MigrantRecord :
                   "Node $nodeID:  Expecting a Migrant record"
-              List <Individual> immigrants
+              List <IslandIndividual> immigrants
               immigrants = ((MigrantRecord)returnedData).migratingIndividuals
 //              println "Immigrants for Node $nodeID"
 //              immigrants.each{println "$it"}

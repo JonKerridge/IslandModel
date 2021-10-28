@@ -1,10 +1,10 @@
-package queens
+package queensIsland
 
-import island_model.Individual
+import island_model.IslandIndividual
 
 // based on http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.129.720&rep=rep1&type=pdf
 
-class QueensIndividual implements Individual{
+class QueensIndividual implements IslandIndividual{
   double fitness
   List <Integer> chromosome = []   // holds the board chromosome[0] is NOT used; set to null
   int geneLength              // number of Queens
@@ -14,7 +14,7 @@ class QueensIndividual implements Individual{
     geneLength = queens
     chromosome = [null]
     for (g in 1 .. geneLength) chromosome << g
-    // now swap queens to mix up initial locations
+    // now swap queensIsland to mix up initial locations
     for (q1 in 1 .. geneLength) {
       int q2 = rng.nextInt(queens) + 1
       chromosome.swap(q1, q2)
@@ -26,11 +26,6 @@ class QueensIndividual implements Individual{
     geneLength = queens
     chromosome = [null]
     for (g in 1 ..< geneLength) chromosome << 0
-  }
-
-  @Override
-  void initialise(Random rng) {
-
   }
 
   @Override

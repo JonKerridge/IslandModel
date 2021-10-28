@@ -1,13 +1,13 @@
 package mainland_model
 
-import island_model.Individual
+import island_model.IslandIndividual
 
 interface MainlandPopulation {
   /**
    * The user is required to write a constructor for any class using this interface.
    */
 
-  List <Individual> population
+  List <MainlandIndividual> population
 
   /**
    * The parameters are all subscripts of individuals in the population List
@@ -33,7 +33,7 @@ interface MainlandPopulation {
    * @param convergenceLimit the value used to determine if convergence as occurred
    * @return the Individual that has satisfied the convergence criteria or null otherwise
    */
-  Individual convergence ()
+  MainlandIndividual convergence ()
 
   /**
    * bestSolution is used to find the individual that has the best solution once the
@@ -41,7 +41,7 @@ interface MainlandPopulation {
    * the convergence criteria as it is based solely on the relative values of Individual.fitness
    * @return the individual that has the best solution within maxGenerations
    */
-  Individual bestSolution()
+  MainlandIndividual bestSolution()
 
   /**
    * processDataFile used to read content of file with name dataFilename

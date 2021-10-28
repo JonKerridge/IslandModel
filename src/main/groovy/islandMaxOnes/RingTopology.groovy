@@ -1,4 +1,4 @@
-package maxOnes
+package islandMaxOnes
 
 import groovy_jcsp.ChannelOutputList
 import island_model.IslandTopology

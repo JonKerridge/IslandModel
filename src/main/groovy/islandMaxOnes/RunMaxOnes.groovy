@@ -1,4 +1,4 @@
-package maxOnes
+package islandMaxOnes
 
 import island_model.IslandEngine
 import island_model.IslandProblemSpecification

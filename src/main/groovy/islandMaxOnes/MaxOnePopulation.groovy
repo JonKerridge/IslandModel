@@ -1,11 +1,11 @@
-package maxOnes
+package islandMaxOnes
 
-import island_model.Individual
+import island_model.IslandIndividual
 import island_model.IslandPopulation
 
 class MaxOnePopulation implements IslandPopulation{
   int individuals
-  List <Individual> population
+  List <IslandIndividual> population
   int geneLength
   double crossoverProbability
   double mutateProbability
@@ -180,8 +180,8 @@ class MaxOnePopulation implements IslandPopulation{
     return migrants
   }
 
-  List <Individual> getMigrants(List <Integer> migrantIndices){
-    List <Individual> migrants
+  List <IslandIndividual> getMigrants(List <Integer> migrantIndices){
+    List <IslandIndividual> migrants
     migrants = []
     for ( m in 0 ..< migrantIndices.size())
       migrants << population[migrantIndices[m]]
@@ -190,14 +190,14 @@ class MaxOnePopulation implements IslandPopulation{
 
 
   @Override
-  void includeImmigrants(List<Individual> incomers, List <Integer> migrantIndices) {
+  void includeImmigrants(List<IslandIndividual> incomers, List <Integer> migrantIndices) {
     assert incomers.size() == migrantIndices.size() : "includeImmigrants: Mismatch in sizes of input Lists"
     for ( m in 0 ..< migrantIndices.size())
       population[migrantIndices[m]] = incomers[m]
   }
 
   @Override
-  Individual convergence(BigDecimal convergenceLimit) {
+  IslandIndividual convergence(BigDecimal convergenceLimit) {
     // convergenceLimit is not used
     int p = 0
     while ((p < individuals) && (population[p].getFitness() < convergenceLimit)) p = p+1
@@ -214,7 +214,7 @@ class MaxOnePopulation implements IslandPopulation{
    * @return the individual that has the best solution
    */
   @Override
-  Individual bestSolution() {
+  IslandIndividual bestSolution() {
     int p
     BigDecimal currentBest = population[0].getFitness()
     int currentIndex = 0

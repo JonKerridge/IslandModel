@@ -1,10 +1,9 @@
 package mainland_model
 
-import island_model.Individual
+
 import jcsp.lang.CSProcess
 import jcsp.lang.ChannelInput
 import jcsp.lang.ChannelOutput
-import maxOneMainland.MaxOneIndividual
 
 class MainlandNode implements CSProcess{
   ChannelInput fromRoot

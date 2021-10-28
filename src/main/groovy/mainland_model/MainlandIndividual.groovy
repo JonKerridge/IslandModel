@@ -1,15 +1,12 @@
-package island_model
+package mainland_model
 
 /**
- * Any Individual using the Island or Mainland Model Engine uses this interface to specify
+ * Any Individual using the Mainland Model Engine uses this interface to specify
  * the methods an Individual class must implement.
  *
- * The user is required to create TWO public constructors.<br>
- * One which actually populates an individual<br>
- * Individual ( int geneLength, Random rng, List evaluateData)<br>
- *
- * The other creates an empty individual<br>
- * Individual (int geneLength, List evaluateData)<br>
+ * A constructor that creates an empty individual is required, where genelength is the number
+ * of elements in a chromosome which should be a list that is set to the empty List<br>
+ * Individual (int geneLength)<br>
  *
  * if omitted evaluateData will default to null<br>
  *
@@ -18,8 +15,12 @@ package island_model
  * rng is the random number generator used by the node to which this Individual belongs <br>
  * evaluateData is any data used in the evaluation of the fitness function or null otherwise<br>
  */
-interface Individual {
+interface MainlandIndividual {
 
+  /**
+   * initialise property values in an individual.
+   * @param rng a random number generator passed from a node; each node has a different rng
+   */
   void initialise(Random rng)
 
   /**
@@ -50,4 +51,8 @@ interface Individual {
    * @return the fitness value of an Individual
    */
   BigDecimal getFitness()
+
+  /**
+   * It is recommended that a String toString() method is supplied
+   */
 }

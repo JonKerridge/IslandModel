@@ -1,8 +1,8 @@
 package maxOneMainland
 
-import island_model.Individual
+import mainland_model.MainlandIndividual
 
-class MaxOneIndividual implements Individual{
+class MaxOneIndividual implements MainlandIndividual{
 
     int fitness
     List <Integer> chromosome

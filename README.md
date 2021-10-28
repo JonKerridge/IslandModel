@@ -1,4 +1,4 @@
-The Island Model project aims to create a multi-core solution for
+The tspIsland Model project aims to create a multi-core solution for
 the running of Evolutionary Algorithms.
 The architecture assumes that many applications will be processed using the 
 architecture and thus all the application classes are specified by their names.

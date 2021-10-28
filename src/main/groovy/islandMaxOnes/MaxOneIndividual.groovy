@@ -1,8 +1,8 @@
-package maxOnes
+package islandMaxOnes
 
-import island_model.Individual
+import island_model.IslandIndividual
 
-class MaxOneIndividual implements Individual{
+class MaxOneIndividual implements IslandIndividual{
   int fitness
   List <Integer> chromosome
   int geneLength
@@ -22,11 +22,6 @@ class MaxOneIndividual implements Individual{
     chromosome = []
     for (g in 0 ..< geneLength)
       chromosome << (Integer) 0
-  }
-
-  @Override
-  void initialise(Random rng) {
-
   }
 
   @Override

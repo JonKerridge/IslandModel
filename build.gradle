@@ -28,6 +28,7 @@ repositories {
 
 dependencies {
     implementation 'org.codehaus.groovy:groovy-all:3.0.9'
+//    implementation 'org.apache.groovy:groovy:4.0.0-beta-1'
     implementation 'cspforjava:jcsp:1.1.9'
     implementation 'jonkerridge:groovy_jcsp:1.1.9'
 }

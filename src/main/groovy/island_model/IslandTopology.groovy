@@ -5,7 +5,7 @@ import groovy_jcsp.ChannelOutputList
 /**
  * IslandTopology describes how each of the MigrantRecords containing migrants from
  * each of the IslandNodes is to be distributed back to the IslandNodes as immigrants.
- * Each Island Node must send and receive the same number of migrants and immigrants.
+ * Each tspIsland Node must send and receive the same number of migrants and immigrants.
  *
  * @distribute the method that implements the migration strategy
  */

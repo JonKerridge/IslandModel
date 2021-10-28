@@ -26,7 +26,7 @@ package island_model
  */
 interface IslandPopulation {
 
-  List <Individual> population // to hold the list of Individuals that form the population
+  List <IslandIndividual> population // to hold the list of Individuals that form the population
   int individuals
   int geneLength
   double crossoverProbability
@@ -75,7 +75,7 @@ interface IslandPopulation {
    * @param migrantIndices the subscripts of the population Individuals to be migrated
    * @return  the selected Individuals
    */
-  List <Individual> getMigrants(List <Integer> migrantIndices)
+  List <IslandIndividual> getMigrants(List <Integer> migrantIndices)
 
   /**
    * Overwrites the Individuals in migrantIndices with the Individuals
@@ -84,7 +84,7 @@ interface IslandPopulation {
    * @param migrantIndices the subscripts in the population where the immigrant incomers
    * s are to be located
    */
-  void includeImmigrants(List <Individual> incomers, List <Integer> migrantIndices)
+  void includeImmigrants(List <IslandIndividual> incomers, List <Integer> migrantIndices)
 
   /**
    * Returns an Individual that satisfies the
@@ -93,7 +93,7 @@ interface IslandPopulation {
    * @param convergenceLimit the value used to determine if convergence has occurred
    * @return the Individual that has satisfied the convergence criteria or null otherwise
    */
-  Individual convergence (BigDecimal convergenceLimit)
+  IslandIndividual convergence (BigDecimal convergenceLimit)
 
   /**
    * bestSolution is used to find the individual that has the best solution once the
@@ -102,7 +102,7 @@ interface IslandPopulation {
    *
    * @return the individual that has the best solution within maxGenerations
    */
-  Individual bestSolution()
+  IslandIndividual bestSolution()
 
   /**
    * Reads content of file with name dataFilename

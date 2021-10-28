@@ -80,10 +80,13 @@ class MainlandProblemSpecification {
 
   @Override
   String toString() {
-    return "$nodes, $instances, $populationPerNode, " +
-        "$geneLength, $crossoverPoints, " +
-        "$maxGenerations, $crossoverProbability, " +
-        "$mutationProbability, $convergenceLimit, $minOrMax, $seeds"
+//    return "$nodes, $instances, $populationPerNode, " +
+//        "$geneLength, $crossoverPoints, " +
+//        "$maxGenerations, $crossoverProbability, " +
+//        "$mutationProbability, $convergenceLimit, $minOrMax, $seeds"
+    return "$nodes, $populationPerNode, " +
+        " $crossoverProbability, " +
+        "$mutationProbability, $replaceInterval, "
   }
 
 }

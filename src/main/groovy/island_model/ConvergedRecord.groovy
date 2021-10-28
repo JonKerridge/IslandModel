@@ -1,7 +1,7 @@
 package island_model
 
 class ConvergedRecord {
-  Individual convergedIndividual
+  IslandIndividual convergedIndividual
   int findingNode
   int generationsTaken
   int instance

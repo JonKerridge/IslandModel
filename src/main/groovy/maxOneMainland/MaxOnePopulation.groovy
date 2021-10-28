@@ -1,6 +1,6 @@
 package maxOneMainland
 
-import island_model.Individual
+import mainland_model.MainlandIndividual
 import mainland_model.MainlandPopulation
 
 class MaxOnePopulation implements MainlandPopulation{
@@ -87,7 +87,7 @@ class MaxOnePopulation implements MainlandPopulation{
     }
 
     @Override
-    Individual convergence() {
+    MainlandIndividual convergence() {
         if (population[bestFitIndex].fitness == convergenceLimit)
             return population[bestFitIndex]
         else
@@ -95,7 +95,7 @@ class MaxOnePopulation implements MainlandPopulation{
     }
 
     @Override
-    Individual bestSolution() {
+    MainlandIndividual bestSolution() {
         return null
     }
 

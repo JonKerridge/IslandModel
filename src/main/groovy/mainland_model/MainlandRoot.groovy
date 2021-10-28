@@ -2,7 +2,7 @@ package mainland_model
 
 import groovy_jcsp.ChannelInputList
 import groovy_jcsp.ChannelOutputList
-import island_model.Individual
+import island_model.IslandIndividual
 import jcsp.lang.CSProcess
 import jcsp.lang.ChannelInput
 import jcsp.lang.ChannelOutput
@@ -16,7 +16,7 @@ class MainlandRoot implements CSProcess{
   ChannelInputList fromNodes
   int instances //number of different problems instances to be created from the same specification
 
-  int partition(List <Individual> m, int start, int end){
+  int partition(List <IslandIndividual> m, int start, int end){
     BigDecimal pivotValue
     pivotValue = m[start].getFitness()
     // getFitness returns a BigDecimal
@@ -43,7 +43,7 @@ class MainlandRoot implements CSProcess{
     return right
   }
 
-  void quickSortRun(List <Individual> b, int start, int end){
+  void quickSortRun(List <IslandIndividual> b, int start, int end){
 //    println "QSR1: $start, $end"
     if (start < end) {
       int splitPoint = partition(b, start, end)
@@ -53,7 +53,7 @@ class MainlandRoot implements CSProcess{
     }
   }
 
-  void quickSort( List <Individual> population, int finalIndex) {
+  void quickSort(List <IslandIndividual> population, int finalIndex) {
     // always sorts into ascending order
     quickSortRun ( population, 0, finalIndex)
     // finalIndex vries depending on inclusion of offspring locations
@@ -124,7 +124,7 @@ class MainlandRoot implements CSProcess{
 //      println "End of population for instance $i"
       // now interact with nodes until convergence
       int generationCount, replaceCount, replacements
-      Individual result
+      MainlandIndividual result
       generationCount = 0
       replaceCount = 0
       replacements = 0
@@ -152,8 +152,10 @@ class MainlandRoot implements CSProcess{
       } //end while loop
       // write outcome to CollectSolution
       String outcome = "SUCCESS"
-      if (result == null) outcome = "FAILURE"
-      result.replacements = replacements
+      if (result == null)
+        outcome = "FAILURE"
+      else
+        result.replacements = replacements
       output.write([outcome, result, generationCount])
       for (n in 0 ..< nodes) {
         toNodes[n].write("FINISH")

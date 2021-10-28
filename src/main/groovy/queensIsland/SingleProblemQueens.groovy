@@ -1,4 +1,4 @@
-package queens
+package queensIsland
 
 import island_model.IslandEngine
 import island_model.IslandProblemSpecification
