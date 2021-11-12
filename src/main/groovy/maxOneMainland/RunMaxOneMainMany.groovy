@@ -11,9 +11,9 @@ int instances = 11
 boolean doSeedModify = true
 
 
-List nodeRange = [4, 8, 12, 16, 24, 32]   // subscript nr
+List nodeRange = [4, 8, 12, 16, 24]   // subscript nr
 List crossoverRange = [1.0, 0.9, 0.8]   // subscript cr
-List mutateRange = [0.4, 0.5, 0.6, 0.7, 0.8]   // subscript mr
+List mutateRange = [0.7, 0.8, 0.9]   // subscript mr
 List replaceRange = [4, 6, 8, 10]   // subscript rr
 
 problem.minOrMax = "MAX"
@@ -51,7 +51,7 @@ nodeRange.each { nr ->
       replaceRange.each { rr ->
         problem.replaceInterval = rr
 
-        String outFile = "./mainlandMaxOnes.csv"
+        String outFile = "./mainlandMaxOnes3.csv"
         def fw = new FileWriter(outFile, true)
         def bw = new BufferedWriter(fw)
         def printWriter = new PrintWriter(bw)

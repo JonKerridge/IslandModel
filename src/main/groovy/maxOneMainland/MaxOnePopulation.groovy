@@ -44,7 +44,6 @@ class MaxOnePopulation implements MainlandPopulation{
         this.mutateProbability = mutateProbability
         this.bestFitIndex = bestFitIndex
         this.dataFileName = datafileName
-        processDataFile()
         population = []
         for ( i in 0 ..< individuals)
             population << new MaxOneIndividual(geneLength)
@@ -60,8 +59,6 @@ class MaxOnePopulation implements MainlandPopulation{
         int parent2,
         int child1,
         int child2,
-        int candidate1,
-        int candidate2,
         Random rng) {
         // this uses a single point crossover for MaxOnes
         int crossoverPoint = rng.nextInt(geneLength)
@@ -80,10 +77,22 @@ class MaxOnePopulation implements MainlandPopulation{
                 population[child1].mutate(rng)
             if (rng.nextDouble() < mutateProbability)
                 population[child2].mutate(rng)
-            // now evaluate the child fitness - evaluationData is null
-            population[child1].evaluateFitness(evaluateData)
-            population[child2].evaluateFitness(evaluateData)
+//            // now evaluate the child fitness - evaluationData is null
+//            population[child1].evaluateFitness(evaluateData)
+//            population[child2].evaluateFitness(evaluateData)
         }
+    }
+/** replace possibly overwrites the candidate individuals with the children resulting from a crossover operation
+ * The parameters are all subscripts of individuals in the population List
+ * @param child1
+ * @param child2
+ * @param candidate1
+ * @param candidate2
+ * this method may be null if the whole population is sorted
+ */
+
+    @Override
+    void replaceCandidates(int child1, int child2, int candidate1, int candidate2) {
     }
 
     @Override
@@ -100,8 +109,8 @@ class MaxOnePopulation implements MainlandPopulation{
     }
 
     @Override
-    void processDataFile() {
-        evaluateData = null
+    List processDataFile(String dataFileName) {
+        return null
     }
 
     String toString(){

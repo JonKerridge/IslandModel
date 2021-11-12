@@ -5,7 +5,7 @@ import island_model.IslandPopulation
 
 
 class TSPIslandPopulation implements IslandPopulation{
-  List <TSPindividual> population
+  List <TSPIslandIndividual> population
   int individuals
   int geneLength
   double crossoverProbability
@@ -37,7 +37,7 @@ class TSPIslandPopulation implements IslandPopulation{
     this.nodeID = nodeId
     processDataFile() // must be done first so that it can bu used to evaluate individual fitness
     for ( i in 0 ..< individuals){
-      population << new TSPindividual(geneLength, rng, distances)
+      population << new TSPIslandIndividual(geneLength, rng, distances)
     }
 
   }
@@ -121,18 +121,18 @@ class TSPIslandPopulation implements IslandPopulation{
     return subscripts
   }
 
-  static def extractParts(Integer start, Integer end, TSPindividual source){
+  static def extractParts(Integer start, Integer end, TSPIslandIndividual source){
     // copies source[start ]..< source[end] into result
     List<Integer> result = []
     for ( i in start ..< end) result << source.route[i]
     return result
   }
 
-  List <TSPindividual> offspring
+  List <TSPIslandIndividual> offspring
 
   static def doMultiPointCrossover(List <List <Integer>>  partsOf1,
                                    List <List <Integer>>  partsOf2,
-                                   TSPindividual child,
+                                   TSPIslandIndividual child,
                                    int crossoverPoints){
     /*
     the number of crossover Points is even
@@ -199,10 +199,10 @@ class TSPIslandPopulation implements IslandPopulation{
 //    println "\nChild $child "
   }
 
-  void replace (int popIndex, TSPindividual replacement){
+  void replace (int popIndex, TSPIslandIndividual replacement){
     for ( g in 0 .. geneLength)
-      ((TSPindividual)population[popIndex]).route[g] = replacement.route[g]
-    ((TSPindividual)population[popIndex]).fitness = replacement.fitness
+      ((TSPIslandIndividual)population[popIndex]).route[g] = replacement.route[g]
+    ((TSPIslandIndividual)population[popIndex]).fitness = replacement.fitness
   }
 
 
@@ -229,7 +229,7 @@ class TSPIslandPopulation implements IslandPopulation{
     // randoms contains a sorted list of random points
     //offspring holds the results of the reproduction
     offspring = []
-    for ( i in 0 .. 1) offspring[i] = new TSPindividual(geneLength, distances)
+    for ( i in 0 .. 1) offspring[i] = new TSPIslandIndividual(geneLength, distances)
     List <List <Integer>> partsOf1 = []   // all the parts of first parent
     for ( i in 0 .. crossoverPoints){
       partsOf1[i] = extractParts(randoms[i], randoms[i+1], population[parents[0]])
@@ -347,7 +347,7 @@ class TSPIslandPopulation implements IslandPopulation{
   void includeImmigrants(List<IslandIndividual> incomers, List<Integer> migrantIndices) {
     assert incomers.size() == migrantIndices.size() : "includeImmigrants: Mismatch in sizes of input Lists"
     for ( m in 0 ..< migrantIndices.size())
-      population[migrantIndices[m]] = incomers[m] as TSPindividual
+      population[migrantIndices[m]] = incomers[m] as TSPIslandIndividual
   }
 
   /**

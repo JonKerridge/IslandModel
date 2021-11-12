@@ -246,6 +246,7 @@ class QueensIslandPopulation implements IslandPopulation{
 //    println "parts 0: $partsOf1, $partsOf2"
     doMultiPointCrossover(partsOf1, partsOf2, offspring[0], crossoverPoints)
 
+    //println "$nodeID - undertaken both crossovers"
     // now do it the other way round between the parents and to a different child
     partsOf1 = []
     partsOf2 = []
@@ -259,7 +260,6 @@ class QueensIslandPopulation implements IslandPopulation{
     }
 //    println "parts 1: $partsOf1, $partsOf2"
     doMultiPointCrossover(partsOf1, partsOf2, offspring[1],crossoverPoints)
-    //println "$nodeID - undertaken both crossovers"
     // now do mutations on the offspring
     if (rng.nextDouble() < mutateProbability) {
       offspring[0].mutate(rng)

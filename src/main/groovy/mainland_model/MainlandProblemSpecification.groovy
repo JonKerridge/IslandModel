@@ -85,8 +85,8 @@ class MainlandProblemSpecification {
 //        "$maxGenerations, $crossoverProbability, " +
 //        "$mutationProbability, $convergenceLimit, $minOrMax, $seeds"
     return "$nodes, $populationPerNode, " +
-        " $crossoverProbability, " +
-        "$mutationProbability, $replaceInterval, "
+        " $crossoverPoints, $crossoverProbability, " +
+        "$mutationProbability, $replaceInterval "
   }
 
 }

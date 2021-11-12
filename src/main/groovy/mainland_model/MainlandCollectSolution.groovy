@@ -27,6 +27,7 @@ class MainlandCollectSolution implements CSProcess{
     int totalGenerations
     int totalRep
     int n
+    int found, none
     List timeData
     List genData
     List repData
@@ -34,6 +35,8 @@ class MainlandCollectSolution implements CSProcess{
     totalGenerations = 0
     totalRep = 0
     n = 0
+    found = 0
+    none = 0
     timeData = []
     genData = []
     repData = []
@@ -49,33 +52,40 @@ class MainlandCollectSolution implements CSProcess{
       String outcome = result[0]
       MainlandIndividual bestOutcome = result[1]
       int generations = result[2]
+      int replacements = result[3]
       long endTime = System.currentTimeMillis()
       long elapsed = endTime - startTime
 //      outString = "Collect $i, of ${instances-1}, " +
 //          "\nSpecification: ${spec.toString()} " +
 //          "\nresult: $outcome -> ${bestOutcome.toString()} in $generations generations, time = "
 //      outString = outString + " ${endTime - startTime}"
-      int replaceNumber
-      if (bestOutcome == null)
-        replaceNumber = 0
-      else
-        replaceNumber = bestOutcome.replacements
-      outString = "$i, " +
-          "${spec.toString()} " +
-          "->, $replaceNumber, $generations, $elapsed"
-      println "$outString"
-      printWriter.println(outString)
-      if ( i > 0 ){
-        timeData << elapsed
-        totalTime = totalTime + elapsed
-        genData << generations
-        totalGenerations = totalGenerations + generations
-        if (bestOutcome != null) {
-          repData << bestOutcome.replacements
-          totalRep = totalRep + bestOutcome.replacements
-        }
-        n = n + 1
+      if (bestOutcome == null) {
+        none = none + 1
+        outString = "$i, " +
+            "${spec.toString()}, " +
+            "-> NONE, $replacements, $generations, $elapsed "
       }
+      else {
+        if ( i > 0 ){
+          timeData << elapsed
+          totalTime = totalTime + elapsed
+          genData << generations
+          totalGenerations = totalGenerations + generations
+          if (bestOutcome != null) {
+            repData << replacements
+            totalRep = totalRep + replacements
+          }
+          n = n + 1
+        } // end if
+        found = found + 1
+        outString = "$i, " +
+            "${spec.toString()}, " +
+            "-> FOUND, $replacements, $generations, $elapsed, ${bestOutcome.getSolution()} "
+      }
+      println "$outString"
+//      printWriter.println(outString) do not print out the intermediate values
+
+
     } // end of for loop
     // assume instances > 2
     // determine SD
@@ -83,14 +93,14 @@ class MainlandCollectSolution implements CSProcess{
     double genAverage = (double)totalGenerations / (double)n
     double  repAverage = (double)totalRep / (double)n
 
-    println " , ${spec.toString()} , " +
+    println "${spec.toString()}, " +
         "$timeAverage, ${sd(timeData, timeAverage, n)}, " +
         "$genAverage, ${sd(genData, genAverage, n)}, " +
-        "$repAverage, ${sd(repData, repAverage, n)}"
-    printWriter.println " , ${spec.toString()} , , , , ," +
+        "$repAverage, ${sd(repData, repAverage, n)}, $found, $none"
+    printWriter.println "${spec.toString()}," +
         "$timeAverage, ${sd(timeData, timeAverage, n)}, " +
         "$genAverage, ${sd(genData, genAverage, n)}, " +
-        "$repAverage, ${sd(repData, repAverage, n)}"
+        "$repAverage, ${sd(repData, repAverage, n)}, $found, $none"
     printWriter.flush()
     printWriter.close()
 //    println "Collect terminating"

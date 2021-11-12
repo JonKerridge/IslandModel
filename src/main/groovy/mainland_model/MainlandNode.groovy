@@ -73,8 +73,18 @@ class MainlandNode implements CSProcess{
       populationAtNode.population[child2].initialise(rng)
       populationAtNode.population[candidate1].initialise(rng)
       populationAtNode.population[candidate2].initialise(rng)
+      populationAtNode.population[parent1].evaluateFitness(evaluateData)
+      populationAtNode.population[parent2].evaluateFitness(evaluateData)
+      populationAtNode.population[child1].evaluateFitness(evaluateData)
+      populationAtNode.population[child2].evaluateFitness(evaluateData)
+      populationAtNode.population[candidate1].evaluateFitness(evaluateData)
+      populationAtNode.population[candidate2].evaluateFitness(evaluateData)
+
       // now initialise any intermediate individuals not otherwise initialised ie ppn > 4
-      otherIndividuals.each{populationAtNode.population[it].initialise(rng)}
+      otherIndividuals.each{
+        populationAtNode.population[it].initialise(rng)
+        populationAtNode.population[it].evaluateFitness(evaluateData)
+      }
       //  tell root initialisation is complete
       toRoot.write(1)
       // now undertake processing of this problem specification
@@ -84,13 +94,20 @@ class MainlandNode implements CSProcess{
         switch (action){
           case "REPLACE":
             // overwrite child1 and child2
+            populationAtNode.population[child1].initialise(rng)
+            populationAtNode.population[child2].initialise(rng)
+            populationAtNode.population[child1].evaluateFitness(evaluateData)
+            populationAtNode.population[child2].evaluateFitness(evaluateData)
             //  tell root replacement is complete
             toRoot.write(1)
             break
           case "REPRODUCE":
-            // reproduce parent1 and parent 2 creating child and child2
+            // reproduce parent1 and parent 2 creating child1 and child2
             populationAtNode.reproduce(parent1, parent2,
-              child1, child2, candidate1, candidate2, rng)
+              child1, child2, rng)
+            populationAtNode.population[child1].evaluateFitness(evaluateData)
+            populationAtNode.population[child2].evaluateFitness(evaluateData)
+            populationAtNode.replaceCandidates(child1, child2, candidate1, candidate2)
             //  tell root reproduction is complete
             toRoot.write(1)
             break
@@ -98,8 +115,8 @@ class MainlandNode implements CSProcess{
             // terminate the processing of this instance
             running = false
         } // end switch
-      } // running loop
-    }// end of for loop
+      } // running while loop
+    }// end of instance for loop
 
 //    println "Node $nodeID terminating"
   }

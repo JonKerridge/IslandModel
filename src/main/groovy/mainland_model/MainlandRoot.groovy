@@ -62,7 +62,7 @@ class MainlandRoot implements CSProcess{
   void run() {
 //    println "Root process starting $instances"
     int bestFitIndex, lastIndex, totalIndex, nodes, populationPerNode
-    String minOrMax, dataFileName
+    String minOrMax
     List evaluateData
     // now process each instance of the problem
     for ( i in 0 ..< instances){
@@ -100,10 +100,8 @@ class MainlandRoot implements CSProcess{
           specification.convergenceLimit,
           bestFitIndex
       )
-      // now read in the fitness evaluation data if any
-      dataFileName = specification.dataFileName
       // read in the data file to evaluateData iff first iteration
-      if (i == 0) populationData.processDataFile()
+      if (i == 0) evaluateData = populationData.processDataFile(specification.dataFileName) // extract evaluationData from file
       //create the empty individual entries in populationData
       for (p in 0 ..< totalIndex)
         populationData.population[p] = individualClass.newInstance(specification.geneLength)
@@ -139,7 +137,7 @@ class MainlandRoot implements CSProcess{
           quickSort(populationData.population, totalIndex)  // sort the population
           replaceCount = 0
           replacements = replacements + 1
-        }
+        } //end replacement counting
         generationCount = generationCount + 1
         replaceCount = replaceCount + 1
         for (n in 0 ..< nodes) {
@@ -149,14 +147,12 @@ class MainlandRoot implements CSProcess{
           fromNodes[n].read() // a signal that reproduction is complete
         }
         quickSort(populationData.population, totalIndex)  // sort the population
+//        println "generation finished $generationCount"
+
       } //end while loop
       // write outcome to CollectSolution
-      String outcome = "SUCCESS"
-      if (result == null)
-        outcome = "FAILURE"
-      else
-        result.replacements = replacements
-      output.write([outcome, result, generationCount])
+      String outcome = (result == null) ? "SUCCESS" : "FAILURE"
+      output.write([outcome, result, generationCount, replacements])
       for (n in 0 ..< nodes) {
         toNodes[n].write("FINISH")
       }

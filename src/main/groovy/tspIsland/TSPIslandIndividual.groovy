@@ -2,14 +2,14 @@ package tspIsland
 
 import island_model.IslandIndividual
 
-class TSPindividual implements IslandIndividual{
+class TSPIslandIndividual implements IslandIndividual{
   int fitness
   List <Integer> route
   int cities
   List <List <Integer>> distances
 
-  TSPindividual ( int geneLength, Random rng,
-                  List<List<Integer>> distances){
+  TSPIslandIndividual(int geneLength, Random rng,
+                      List<List<Integer>> distances){
     this.distances = distances
     this.cities = distances.size() -1 // the first row is just [0]
     route = []
@@ -25,8 +25,8 @@ class TSPindividual implements IslandIndividual{
 
   }
 
-  TSPindividual(int cities,
-                List<List<Integer>> distances ){
+  TSPIslandIndividual(int cities,
+                      List<List<Integer>> distances ){
     this.distances = distances
     this.cities = distances.size() -1
     route = []

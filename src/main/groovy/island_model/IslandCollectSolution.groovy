@@ -64,8 +64,8 @@ class IslandCollectSolution implements CSProcess{
 
         outString = outString + " NONE, " +
             "${((TerminationCollection)result).bestRecords[bestLocation].fitness}, " +
-            "${spec.maxGenerations}, "
-//            "${((IslandIndividual)((TerminationCollection)result).bestRecords[bestLocation]).getSolution()} , , ," +
+            "${((IslandIndividual)((TerminationCollection)result).bestRecords[bestLocation]).getSolution()} ," +
+            "${spec.maxGenerations}, " +
             " $elapsed"
       }
       else {
@@ -81,7 +81,7 @@ class IslandCollectSolution implements CSProcess{
           }
         outString = outString +  " ${solutions.size()}, " +
             "${solutions[minSolution].convergedIndividual.getFitness()}, " +
-//            "${solutions[minSolution].convergedIndividual.getSolution()}, " +
+            "${solutions[minSolution].convergedIndividual.getSolution()}, " +
             "${solutions[minSolution].generationsTaken}, " +
 //            "${solutions[minSolution].seedValue}, " +
             "$elapsed"

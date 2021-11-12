@@ -9,11 +9,11 @@ if (outputFile.exists()) outputFile.delete()
 def printWriter = outputFile.newPrintWriter()
 
 def tspSpecification = new IslandProblemSpecification()
-tspSpecification.nodes = 12
+tspSpecification.nodes = 8
 tspSpecification.instances = 10
-tspSpecification.dataFileName = "./dantzig42.tspIsland"   // "./10cities.tspIsland"
+tspSpecification.dataFileName = "./10cities.tsp" //"./10cities.tsp" "./dantzig42.tspIsland"
 tspSpecification.populationClass = TSPIslandPopulation.getName()
-tspSpecification.geneLength = 43 // 11
+tspSpecification.geneLength = 11    //  11  43
 tspSpecification.populationPerNode = 16
 tspSpecification.migrationInterval = 16
 tspSpecification.migrationSize = 4
@@ -21,7 +21,7 @@ tspSpecification.crossoverPoints = 2
 tspSpecification.maxGenerations = 20000
 tspSpecification.crossoverProbability = 1.0
 tspSpecification.mutationProbability = 0.8
-tspSpecification.convergenceLimit = 800.0
+tspSpecification.convergenceLimit = 50.0
 tspSpecification.minOrMax = "MIN"
 tspSpecification.doSeedModify = true
 tspSpecification.seeds = [3, 211, 419, 631, 839, 1039, 1249, 1451,

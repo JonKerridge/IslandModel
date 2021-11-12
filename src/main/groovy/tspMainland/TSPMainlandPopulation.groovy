@@ -1,11 +1,10 @@
-package queensMainland
+package tspMainland
 
 import mainland_model.MainlandIndividual
 import mainland_model.MainlandPopulation
-import maxOneMainland.MaxOneIndividual
-import queensIsland.QueensIndividual
 
-class QueensMainlandPopulation implements MainlandPopulation{
+
+class TSPMainlandPopulation implements MainlandPopulation{
 
   // the properties of the class
   int individuals   // active population plus the space for reproduction offspring
@@ -20,20 +19,20 @@ class QueensMainlandPopulation implements MainlandPopulation{
   int bestFitIndex    // subscript in population with the best solution
 
   // the created objects of the class
-  List <MainlandIndividual> population // to hold the list of individuals that form the population
+  List <TSPMainlandIndividual> population // to hold the list of individuals that form the population
   List evaluateData   // the data structure used to hold the fitness evaluation data if required
 
-  QueensMainlandPopulation(
-    int individuals,   // active population plus the space for reproduction offspring
-    int geneLength,    // the length of each individuals chromosome
-    int crossoverPoints, // the EVEN number of points used to break the chromosome when doing reproduction
-    int maxGenerations,  // maximum number of iterations before termination
-    int replaceInterval,  // iterations required before new individuals created with no change in best fitness
-    double crossoverProbability, // the probability that reproduction will lead to an acutal crossover operation
-    double mutateProbability,  // the probability that mutation will occur after crossover
-    String dataFileName, // the name of any data file used to provide data for the evaluate fitness function
-    BigDecimal convergenceLimit, // the limit to be achieved for successful convergence
-    int bestFitIndex    // subscript in population with the best solution
+  TSPMainlandPopulation(
+  int individuals,   // active population plus the space for reproduction offspring
+  int geneLength,    // the length of each individuals chromosome
+  int crossoverPoints, // the EVEN number of points used to break the chromosome when doing reproduction
+  int maxGenerations,  // maximum number of iterations before termination
+  int replaceInterval,  // iterations required before new individuals created with no change in best fitness
+  double crossoverProbability, // the probability that reproduction will lead to an actual crossover operation
+  double mutateProbability,  // the probability that mutation will occur after crossover
+  String dataFileName, // the name of any data file used to provide data for the evaluate fitness function
+  BigDecimal convergenceLimit, // the limit to be achieved for successful convergence
+  int bestFitIndex    // subscript in population with the best solution
   ){
     this.individuals = individuals
     this.geneLength = geneLength
@@ -41,17 +40,18 @@ class QueensMainlandPopulation implements MainlandPopulation{
     this.maxGenerations = maxGenerations
     this.replaceInterval = replaceInterval
     this.crossoverProbability = crossoverProbability
-    this.mutateProbability= mutateProbability
+    this.mutateProbability = mutateProbability
     this.dataFileName = dataFileName
     this.convergenceLimit = convergenceLimit
     this.bestFitIndex = bestFitIndex
-//    processDataFile()
     population = []
-    for ( i in 0 ..< individuals)
-      population << new QueensMainlandIndividual(geneLength)
+//    processDataFile()
+    for (i in 0 ..< individuals){
+      population << new TSPMainlandIndividual(geneLength)
+    }
   }
 
-  static def extractParts(Integer start, Integer end, QueensMainlandIndividual source){
+  static def extractParts(Integer start, Integer end, TSPMainlandIndividual source){
     // copies source[start ]..< source[end] into result
     List<Integer> result = []
     for ( i in start ..< end) result << source.chromosome[i]
@@ -71,7 +71,7 @@ class QueensMainlandPopulation implements MainlandPopulation{
 
   static def doMultiPointCrossover(List <List <Integer>>  partsOf1,
                                    List <List <Integer>>  partsOf2,
-                                   QueensMainlandIndividual child,
+                                   TSPMainlandIndividual child,
                                    int crossoverPoints){
     /*
     the number of crossover Points is even
@@ -119,10 +119,10 @@ class QueensMainlandPopulation implements MainlandPopulation{
     }
     /* now rebuild the replacement child by appending the now modified even subsections of partsOf1
     and the unaltered subsections of partsOf2 in sequence.
-    The parts are appended to a null value as the zeroth element of a board is always null
+    The parts are appended to a 1 value as the zeroth element of a route is always 1
     The final updated version of the individual's board is obtained by flatten()ing
      */
-    child.chromosome = [null]
+    child.chromosome = [1]
     bitOf1 = 0
     bitOf2 = 0
     while ( bitOf1 < crossoverPoints) {
@@ -132,6 +132,8 @@ class QueensMainlandPopulation implements MainlandPopulation{
       bitOf2++
     }
     child.chromosome << (partsOf1[crossoverPoints] )
+    // now add final 1 to return to starting point
+    child.chromosome << [1]
     child.chromosome = child.chromosome.flatten() as List<Integer>
 //    child.evaluateFitness() // for printing only?
 //    println "\nChild $child "
@@ -149,61 +151,75 @@ class QueensMainlandPopulation implements MainlandPopulation{
    *
    */
   @Override
-  void reproduce(int parent1, int parent2, int child1, int child2, Random rng) {
-    List <Integer> randoms = [1]  // first queen is in location 1 of board
-    for (n in 1 .. crossoverPoints ){
-      int c = rng.nextInt(geneLength) + 1
-      while ( randoms.contains(c)) c = rng.nextInt(geneLength) + 1
+  void reproduce(int parent1, int parent2,
+                 int child1, int child2,
+                 Random rng) {
+    List<Integer> randoms = [1]  // first flexible city is in location 1 of route (chromosome)
+    for (n in 1..crossoverPoints) {
+      int c = rng.nextInt(geneLength -3) + 1
+      while (randoms.contains(c)) c = rng.nextInt(geneLength -3) + 1
       randoms << c
     }
-    randoms << geneLength + 1
+    randoms << geneLength - 1 // last city is always 1 and must be ignored
     randoms = randoms.sort()
-    // randoms contains a sorted list of random points between the first  queen and the
+//    println "randoms = $randoms, \n${population[parent1].chromosome}, \n${population[parent2].chromosome}"
+    // randoms contains a sorted list of random points
     // determine parts to be crossed over
-    List <List <Integer>> partsOf1 = []   // all the parts of first parent
-    for ( i in 0 .. crossoverPoints){
-      partsOf1[i] = extractParts(randoms[i], randoms[i+1], population[parent1])
+    List<List<Integer>> partsOf1 = []   // all the parts of first parent
+    for (i in 0..crossoverPoints) {
+      partsOf1[i] = extractParts(randoms[i], randoms[i + 1], population[parent1])
     }
-    List <List <Integer>> partsOf2 = []   // odd parts of second parent
+    List<List<Integer>> partsOf2 = []   // odd parts of second parent
     // crossover is between the odd subsections of partsOf1 and each subsection
     // of partsOf2 in turn
     int section = 1
     while (section < crossoverPoints) {
-      partsOf2 << extractParts(randoms[section] , randoms[section+1], population[parent2])
+      partsOf2 << extractParts(randoms[section], randoms[section + 1], population[parent2])
       section = section + 2
     }
-//    println "parts 0: $partsOf1, $partsOf2"
+//    println "parts 0a: $partsOf1, $partsOf2"
     doMultiPointCrossover(partsOf1, partsOf2, population[child1], crossoverPoints)
+//    println "parts 0: pnt1= ${population[parent1].chromosome},  p1= $partsOf1, " +
+//        "\npnt2= ${population[parent2].chromosome}, p2= $partsOf2, \nc1= ${population[child1].chromosome}"
 
     // now do it the other way round between the parents and to a different child
     partsOf1 = []
     partsOf2 = []
-    for ( i in 0 .. crossoverPoints){
-      partsOf1[i] = extractParts(randoms[i] as int, randoms[i+1] as int, population[parent2])
+    for (i in 0..crossoverPoints) {
+      partsOf1[i] = extractParts(randoms[i] as int, randoms[i + 1] as int, population[parent2])
     }
     section = 1
     while (section < crossoverPoints) {
-      partsOf2 << extractParts(randoms[section] as int, randoms[section+1] as int, population[parent1])
+      partsOf2 << extractParts(randoms[section] as int, randoms[section + 1] as int, population[parent1])
       section = section + 2   // we take the odd sections for processing
     }
-//    println "parts 1: $partsOf1, $partsOf2"
-    doMultiPointCrossover(partsOf1, partsOf2, population[child2],crossoverPoints)
+//    println "parts 1a: $partsOf1, $partsOf2"
+    doMultiPointCrossover(partsOf1, partsOf2, population[child2], crossoverPoints)
+//    println "parts 1: pnt1= ${population[parent1].chromosome},  p1= $partsOf1, " +
+//        "\npnt2= ${population[parent2].chromosome}, p2= $partsOf2, \nc1= ${population[child2].chromosome}"
+//    println "pnt1= ${population[parent1].chromosome}" +
+//        "\npnt2= ${population[parent2].chromosome}" +
+//        " \nc1= ${population[child1].chromosome}" +
+//    " \nc2= ${population[child2].chromosome}"
 
     // now do mutations on the offspring
     if (rng.nextDouble() < mutateProbability) {
       population[child1].mutate(rng)
       //println "$nodeID - mutation 1 done"
+//      println "mut1 = ${population[child1].chromosome}"
     }
+
     if (rng.nextDouble() < mutateProbability) {
       population[child2].mutate(rng)
       //println "$nodeID - mutation 2 done"
+//      println "mut2 = ${population[child2].chromosome}"
     }
 //    population[child1].evaluateFitness(evaluateData)
 //    population[child2].evaluateFitness(evaluateData)
-
   }
 
-  /**
+
+    /**
    * @param convergenceLimit the value used to determine if convergence as occurred
    * @return the Individual that has satisfied the convergence criteria or null otherwise
    */
@@ -216,13 +232,13 @@ class QueensMainlandPopulation implements MainlandPopulation{
  * this method may be null if the whole population is sorted
  */
   @Override
-  void replaceCandidates(int chil1, int chil2, int candidat1, int candidate2) {
+  void replaceCandidates(int child1, int child2, int candidate1, int candidate2) {
 
   }
 
   @Override
-  QueensMainlandIndividual convergence() {
-    if (population[bestFitIndex].fitness == convergenceLimit)
+  MainlandIndividual convergence() {
+    if (population[bestFitIndex].fitness < convergenceLimit)
       return population[bestFitIndex]
     else
       return null
@@ -235,7 +251,7 @@ class QueensMainlandPopulation implements MainlandPopulation{
    * @return the individual that has the best solution within maxGenerations
    */
   @Override
-  QueensMainlandIndividual bestSolution() {
+  MainlandIndividual bestSolution() {
     return population[bestFitIndex]
   }
 
@@ -245,6 +261,25 @@ class QueensMainlandPopulation implements MainlandPopulation{
    * Individual evaluateFitness method*/
   @Override
   List processDataFile(String dataFileName) {
-    return null
+//    println "process $dataFileName"
+    List evaluateData = []
+    evaluateData[0] = [0]  // no city with subscript 0
+    int row
+    row = 1
+    new File(dataFileName).eachLine {line ->
+//      println "$line"
+      evaluateData[row]= [0]
+      List <String> values = line.tokenize(',')
+      for ( v in 0 ..< values.size()) evaluateData[row][v+1] = Integer.parseInt(values[v])
+      row += 1
+    }
+    int rows = evaluateData.size()
+    for ( r in 1 ..< rows)
+      for ( rc in r+1 ..< rows)
+        evaluateData[r][rc] = evaluateData[rc][r]
+
+//    println "\nSquare : $rows\n"
+//    evaluateData.each{println "$it"}
+    return evaluateData
   }
 }

@@ -7,7 +7,6 @@ class MaxOneIndividual implements MainlandIndividual{
     int fitness
     List <Integer> chromosome
     int geneLength
-    int replacements
 
     // used to create an Individual with initialised chromosome
     void initialise (Random rng){
@@ -52,6 +51,6 @@ class MaxOneIndividual implements MainlandIndividual{
 //            ", replacements=" + replacements +
 ////            ", chromosome=" + chromosome +
 //            ", geneLength=" + geneLength + '}';
-        return "[, $fitness, $replacements, ] "
+        return "$fitness, "
     }
 }
