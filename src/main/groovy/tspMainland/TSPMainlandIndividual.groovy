@@ -100,7 +100,11 @@ class TSPMainlandIndividual implements MainlandIndividual{
    * @return the fitness value of an Individual
    */
   @Override
-  BigDecimal getFitness() {
-    return fitness as BigDecimal
+  def getFitness() {
+    return fitness
+  }
+
+  String toString(){
+    return "$fitness"
   }
 }

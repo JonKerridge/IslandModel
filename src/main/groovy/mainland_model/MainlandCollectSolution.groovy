@@ -23,7 +23,7 @@ class MainlandCollectSolution implements CSProcess{
   void run(){
 //    println "Collect process running $instances"
     MainlandProblemSpecification spec
-    long totalTime
+    long totalTime, seedValue
     int totalGenerations
     int totalRep
     int n
@@ -49,7 +49,7 @@ class MainlandCollectSolution implements CSProcess{
       long startTime = System.currentTimeMillis()
       // now read result
       List result = input.read()
-      String outcome = result[0]
+      seedValue = result[0]
       MainlandIndividual bestOutcome = result[1]
       int generations = result[2]
       int replacements = result[3]
@@ -63,7 +63,7 @@ class MainlandCollectSolution implements CSProcess{
         none = none + 1
         outString = "$i, " +
             "${spec.toString()}, " +
-            "-> NONE, $replacements, $generations, $elapsed "
+            "NONE, $replacements, $generations, $elapsed "
       }
       else {
         if ( i > 0 ){
@@ -80,7 +80,7 @@ class MainlandCollectSolution implements CSProcess{
         found = found + 1
         outString = "$i, " +
             "${spec.toString()}, " +
-            "-> FOUND, $replacements, $generations, $elapsed, ${bestOutcome.getSolution()} "
+            "FOUND, $replacements, $generations, $elapsed, ${bestOutcome.toString()}, $seedValue "
       }
       println "$outString"
 //      printWriter.println(outString) do not print out the intermediate values

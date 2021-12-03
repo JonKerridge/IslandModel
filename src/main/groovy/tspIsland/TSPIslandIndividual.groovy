@@ -60,4 +60,8 @@ class TSPIslandIndividual implements IslandIndividual{
   BigDecimal getFitness() {
     return fitness
   }
+
+  String toString(){
+    return "$fitness "
+  }
 }

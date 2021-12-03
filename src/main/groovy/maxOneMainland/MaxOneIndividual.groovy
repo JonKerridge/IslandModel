@@ -10,6 +10,7 @@ class MaxOneIndividual implements MainlandIndividual{
 
     // used to create an Individual with initialised chromosome
     void initialise (Random rng){
+        chromosome = []
         for (g in 0 ..< geneLength)
             chromosome << (Integer) rng.nextInt(2)
         evaluateFitness(null)
@@ -41,8 +42,8 @@ class MaxOneIndividual implements MainlandIndividual{
     }
 
     @Override
-    BigDecimal getFitness() {
-        return fitness as BigDecimal
+    def getFitness() {
+        return fitness
     }
 
     @Override

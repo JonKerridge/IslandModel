@@ -50,8 +50,9 @@ class MaxOneIndividual implements IslandIndividual{
 
   @Override
   public String toString() {
-    return "MaxOneIndividual{" + "fitness=" + fitness +
-//        ", chromosome=" + chromosome +
-        ", geneLength=" + geneLength + '}';
+//    return "MaxOneIndividual{" + "fitness=" + fitness +
+////        ", chromosome=" + chromosome +
+//        ", geneLength=" + geneLength + '}';
+    return "$fitness"
   }
 }

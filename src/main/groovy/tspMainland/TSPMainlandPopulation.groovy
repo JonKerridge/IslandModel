@@ -15,7 +15,6 @@ class TSPMainlandPopulation implements MainlandPopulation{
   double crossoverProbability // the probability that reproduction will lead to an acutal crossover operation
   double mutateProbability  // the probability that mutation will occur after crossover
   String dataFileName // the name of any data file used to provide data for the evaluate fitness function
-  BigDecimal convergenceLimit // the limit to be achieved for successful convergence
   int bestFitIndex    // subscript in population with the best solution
 
   // the created objects of the class
@@ -31,7 +30,6 @@ class TSPMainlandPopulation implements MainlandPopulation{
   double crossoverProbability, // the probability that reproduction will lead to an actual crossover operation
   double mutateProbability,  // the probability that mutation will occur after crossover
   String dataFileName, // the name of any data file used to provide data for the evaluate fitness function
-  BigDecimal convergenceLimit, // the limit to be achieved for successful convergence
   int bestFitIndex    // subscript in population with the best solution
   ){
     this.individuals = individuals
@@ -42,7 +40,7 @@ class TSPMainlandPopulation implements MainlandPopulation{
     this.crossoverProbability = crossoverProbability
     this.mutateProbability = mutateProbability
     this.dataFileName = dataFileName
-    this.convergenceLimit = convergenceLimit
+//    this.convergenceLimit = convergenceLimit
     this.bestFitIndex = bestFitIndex
     population = []
 //    processDataFile()
@@ -233,11 +231,37 @@ class TSPMainlandPopulation implements MainlandPopulation{
  */
   @Override
   void replaceCandidates(int child1, int child2, int candidate1, int candidate2) {
-
+    int child1Fit = population[child1].getFitness()
+    int child2Fit = population[child2].getFitness()
+    int candidate2Fit = population[candidate2].getFitness()
+    // assume candidate2Fit is at least as good as candidate1Fit and is probably better
+    // due to the ordering of the candidates in the population
+    // we do not know the ordering of child fitness; it is a minimise problem
+    if ( child1Fit < child2Fit){
+      if (child2Fit < candidate2Fit){
+        // both candidates can be replaced by the children
+        // the ordering does not matter as they will be sorted on return to Root
+        population.swap(child1, candidate1)
+        population.swap(child2, candidate2)
+      } else {
+        // only child1 can overwrite candidate1
+        population.swap(child1, candidate1)
+      }
+    } else { //child2 is the better
+      if (child1Fit < candidate2Fit){
+        // both candidates can be replaced by the children
+        // the ordering does not matter as they will be sorted on return to Root
+        population.swap(child1, candidate1)
+        population.swap(child2, candidate2)
+      } else {
+        // only child2 can overwrite candidate1
+        population.swap(child2, candidate1)
+      }
+    }
   }
 
   @Override
-  MainlandIndividual convergence() {
+  MainlandIndividual convergence(def convergenceLimit) {
     if (population[bestFitIndex].fitness < convergenceLimit)
       return population[bestFitIndex]
     else

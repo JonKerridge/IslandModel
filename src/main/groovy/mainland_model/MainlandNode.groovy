@@ -103,8 +103,7 @@ class MainlandNode implements CSProcess{
             break
           case "REPRODUCE":
             // reproduce parent1 and parent 2 creating child1 and child2
-            populationAtNode.reproduce(parent1, parent2,
-              child1, child2, rng)
+            populationAtNode.reproduce(parent1, parent2, child1, child2, rng)
             populationAtNode.population[child1].evaluateFitness(evaluateData)
             populationAtNode.population[child2].evaluateFitness(evaluateData)
             populationAtNode.replaceCandidates(child1, child2, candidate1, candidate2)

@@ -20,7 +20,7 @@ package mainland_model
  * if convergence has not been found
  * @param crossoverProbability the probability of a crossover operation taking place
  * @param mutationProbability the probability of a mutation taking place in a reproduction offspring
- * @param convergenceLimit the value used to determine convergence
+ * @param convergenceLimit the value used to determine convergence. This can be of any type.
  * @param minOrMax MIN = a minimisation or MAX = a maximisation problem
  * @param seeds the initial seeds used by each node for their random number generator (one per node)
  * @param doSeedModify controls the modification of seeds for each instance
@@ -36,7 +36,7 @@ class MainlandProblemSpecification {
   int crossoverPoints, maxGenerations, replaceInterval
   double crossoverProbability, mutationProbability
   boolean doSeedModify
-  BigDecimal convergenceLimit
+  def convergenceLimit
   List <Long> seeds
 
   /**
@@ -84,7 +84,7 @@ class MainlandProblemSpecification {
 //        "$geneLength, $crossoverPoints, " +
 //        "$maxGenerations, $crossoverProbability, " +
 //        "$mutationProbability, $convergenceLimit, $minOrMax, $seeds"
-    return "$nodes, $populationPerNode, " +
+    return "$nodes, $populationPerNode, $geneLength, " +
         " $crossoverPoints, $crossoverProbability, " +
         "$mutationProbability, $replaceInterval "
   }

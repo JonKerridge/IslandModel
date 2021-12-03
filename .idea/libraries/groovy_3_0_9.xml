@@ -1,0 +1,64 @@
+<component name="libraryTable">
+  <library name="groovy-3.0.9" type="groovy-library">
+    <properties version="3.0.9" />
+    <CLASSES>
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-datetime-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-yaml-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-jsr223-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-jaxb-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-servlet-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-test-junit5-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-astbuilder-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-dateutil-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-testng-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-nio-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-bsf-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-templates-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-cli-commons-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-ant-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-sql-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-cli-picocli-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-docgenerator-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-test-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-jmx-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-json-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-macro-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-xml-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-groovydoc-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-swing-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-groovysh-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-console-3.0.9.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-3.0.9.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-bsf-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-cli-commons-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-astbuilder-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-ant-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-cli-picocli-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-datetime-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-dateutil-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-jaxb-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-jsr223-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-servlet-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-macro-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-nio-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-docgenerator-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-jmx-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-test-junit5-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-yaml-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-templates-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-groovydoc-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-sql-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-test-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-json-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-groovysh-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-xml-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-console-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-swing-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-testng-3.0.9-sources.jar!/" />
+      <root url="jar://C:/Groovy/groovy-3.0.9/groovy-3.0.9-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

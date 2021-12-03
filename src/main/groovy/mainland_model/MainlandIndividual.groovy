@@ -16,7 +16,7 @@ interface MainlandIndividual {
    * Any Individual using the Mainland Model Engine uses this interface to specify
    * the methods an Individual class must implement.  The class will have the following properties:<br>
    *
-   int fitness
+   def fitness    // this can be any comparable type
    List chromosome
    int geneLength
 
@@ -64,7 +64,7 @@ interface MainlandIndividual {
    * returns the fitness value of an Individual
    * @return the fitness value of an Individual
    */
-  BigDecimal getFitness()
+  Object getFitness()
 
   /**
    * It is recommended that a String toString() method is supplied

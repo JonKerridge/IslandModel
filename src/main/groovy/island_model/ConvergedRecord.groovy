@@ -5,7 +5,7 @@ class ConvergedRecord {
   int findingNode
   int generationsTaken
   int instance
-  double seedValue
+  long seedValue
 
   String toString(){
     String s = "Fitness: ${convergedIndividual.getFitness()}, " +

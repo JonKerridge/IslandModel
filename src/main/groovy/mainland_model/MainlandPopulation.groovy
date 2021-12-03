@@ -16,7 +16,6 @@ interface MainlandPopulation {
    double crossoverProbability // the probability that reproduction will lead to an acutal crossover operation
    double mutateProbability  // the probability that mutation will occur after crossover
    String dataFileName // the name of any data file used to provide data for the evaluate fitness function
-   BigDecimal convergenceLimit // the limit to be achieved for successful convergence
    int bestFitIndex    // subscript in population with the best solution
 
    // the created objects of the class
@@ -65,7 +64,7 @@ interface MainlandPopulation {
    * @param convergenceLimit the value used to determine if convergence as occurred
    * @return the Individual that has satisfied the convergence criteria or null otherwise
    */
-  MainlandIndividual convergence ()
+  MainlandIndividual convergence (def convergenceLimit)
 
   /**
    * bestSolution is used to find the individual that has the best solution once the

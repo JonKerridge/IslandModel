@@ -5,9 +5,9 @@ import mainland_model.MainlandEngine
 import mainland_model.MainlandProblemSpecification
 
 String outFile = "./SingleMainlandTest.csv"
-File outputFile = new File(outFile)
-if (outputFile.exists()) outputFile.delete()
-def printWriter = outputFile.newPrintWriter()
+def fw = new FileWriter(outFile, true)
+def bw = new BufferedWriter(fw)
+def printWriter = new PrintWriter(bw)
 
 def queensSpecification = new MainlandProblemSpecification()
 queensSpecification.nodes = 8
@@ -15,9 +15,9 @@ queensSpecification.instances = 11
 queensSpecification.dataFileName = null
 queensSpecification.populationClass = QueensMainlandPopulation.getName()
 queensSpecification.individualClass = QueensMainlandIndividual.getName()
-queensSpecification.geneLength = 64
+queensSpecification.geneLength = 32
 queensSpecification.populationPerNode = 4
-queensSpecification.replaceInterval = 32
+queensSpecification.replaceInterval = 4
 queensSpecification.crossoverPoints = 2
 queensSpecification.maxGenerations = 2000
 queensSpecification.crossoverProbability = 1.0

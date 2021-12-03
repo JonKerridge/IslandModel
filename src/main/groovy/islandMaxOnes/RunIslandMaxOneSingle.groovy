@@ -4,17 +4,11 @@ import island_model.IslandEngine
 import island_model.IslandProblemSpecification
 
 def problem = new IslandProblemSpecification()
-int nodes = 16
-int ppn = 4  // 8 16 24 32
+int nodes = 12
+int ppn = 6  // 8 16 24 32
 int geneLength = 512
 int instances = 11
 boolean doSeedModify = true
-
-List nodeRange = [4, 8, 12, 16]   // subscript nr
-List crossoverRange = [1.0, 0.9, 0.8]   // subscript cr
-List mutateRange = [0.7, 0.8, 0.9]   // subscript mr
-List migrateIntervals = [4]   // subscript mi
-List migrateSizes= [2]   // subscript ms
 
 problem.nodes = nodes
 problem.instances = instances
@@ -23,7 +17,7 @@ problem.populationClass = MaxOnePopulation.getName()
 problem.geneLength = geneLength
 problem.populationPerNode = ppn
 problem.migrationInterval = 16
-problem.migrationSize = 4
+problem.migrationSize = 2
 problem.crossoverPoints = 1
 problem.maxGenerations = 4000
 problem.crossoverProbability = 1.0
@@ -40,34 +34,18 @@ problem.seeds = [3, 211, 419, 631, 839, 1039, 1249, 1451,
 
 RingTopology topology = new RingTopology()
 
-nodeRange.each { nr ->
-  problem.nodes = nr
-  problem.populationPerNode = ppn
-  crossoverRange.each { cr ->
-    problem.crossoverProbability = cr
-    mutateRange.each { mr ->
-      problem.mutationProbability = mr
-      migrateIntervals.each { mi ->
-        problem.migrationInterval = mi
-        migrateSizes.each { ms -> problem.migrationSize = ms
+String outFile = "./islandMaxOnesSingle.csv"
+def fw = new FileWriter(outFile, true)
+def bw = new BufferedWriter(fw)
+def printWriter = new PrintWriter(bw)
+def islandEngine = new IslandEngine(problemSpecification: problem,
+    topology: topology,
+    instances: problem.instances,
+    doSeedModify: problem.doSeedModify,
+    nodes: problem.nodes,
+    printWriter: printWriter)
+islandEngine.invoke()
 
-          String outFile = "./islandMaxOnes${ppn}.csv"
-          def fw = new FileWriter(outFile, true)
-          def bw = new BufferedWriter(fw)
-          def printWriter = new PrintWriter(bw)
-          def islandEngine = new IslandEngine(problemSpecification: problem,
-              topology: topology,
-              instances: problem.instances,
-              doSeedModify: problem.doSeedModify,
-              nodes: problem.nodes,
-              printWriter: printWriter)
-          islandEngine.invoke()
-
-        }
-      }
-    }
-  }
-}
 
 
 

@@ -31,7 +31,6 @@ class MaxOnePopulation implements MainlandPopulation{
         double crossoverProbability,
         double mutateProbability,
         String datafileName,
-        BigDecimal convergenceLimit,
         int bestFitIndex)
     {
         this.individuals = individuals
@@ -93,10 +92,38 @@ class MaxOnePopulation implements MainlandPopulation{
 
     @Override
     void replaceCandidates(int child1, int child2, int candidate1, int candidate2) {
+        int child1Fit = population[child1].getFitness()
+        int child2Fit = population[child2].getFitness()
+        int candidate1Fit = population[candidate1].getFitness()
+        int candidate2Fit = population[candidate2].getFitness()
+        // assume candidate2Fit is at least as good as candidate1Fit and is probably better
+        // due to the ordering of the candidates in the population
+        // we do not know the ordering of child fitness; it is a maximise problem
+        if ( child1Fit > child2Fit){
+            if (child2Fit > candidate2Fit){
+                // both candidates can be replaced by the children
+                // the ordering does not matter as they will be sorted on return to Root
+                population.swap(child1, candidate1)
+                population.swap(child2, candidate2)
+            } else {
+                // only child1 can overwrite candidate1
+                population.swap(child1, candidate1)
+            }
+        } else { //child2 is the better
+            if (child1Fit > candidate2Fit){
+                // both candidates can be replaced by the children
+                // the ordering does not matter as they will be sorted on return to Root
+                population.swap(child1, candidate1)
+                population.swap(child2, candidate2)
+            } else {
+                // only child2 can overwrite candidate1
+                population.swap(child2, candidate1)
+            }
+        }
     }
 
     @Override
-    MainlandIndividual convergence() {
+    MainlandIndividual convergence(def convergenceLimit) {
         if (population[bestFitIndex].fitness == convergenceLimit)
             return population[bestFitIndex]
         else

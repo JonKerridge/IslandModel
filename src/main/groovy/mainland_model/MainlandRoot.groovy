@@ -64,6 +64,7 @@ class MainlandRoot implements CSProcess{
     int bestFitIndex, lastIndex, totalIndex, nodes, populationPerNode
     String minOrMax
     List evaluateData
+    def convergenceLimit
     // now process each instance of the problem
     for ( i in 0 ..< instances){
       MainlandProblemSpecification specification = input.read() as MainlandProblemSpecification
@@ -72,6 +73,7 @@ class MainlandRoot implements CSProcess{
       if (i == 0){
 //        println "Root processing specification 0"
         // obtain non-changing values from specification
+        convergenceLimit = specification.convergenceLimit
         nodes = specification.nodes
         populationPerNode = specification.populationPerNode
         assert populationPerNode >= 4:"Population Per Node must be at least 4; $populationPerNode specified"
@@ -97,7 +99,6 @@ class MainlandRoot implements CSProcess{
           specification.crossoverProbability,
           specification.mutationProbability,
           specification.dataFileName,
-          specification.convergenceLimit,
           bestFitIndex
       )
       // read in the data file to evaluateData iff first iteration
@@ -122,11 +123,20 @@ class MainlandRoot implements CSProcess{
 //      println "End of population for instance $i"
       // now interact with nodes until convergence
       int generationCount, replaceCount, replacements
+      def currentFitness
       MainlandIndividual result
       generationCount = 0
       replaceCount = 0
       replacements = 0
-      while (( (result = populationData.convergence()) == null ) && (generationCount < specification.maxGenerations)){
+      currentFitness = populationData.population[bestFitIndex].getFitness()
+      while (( (result = populationData.convergence(convergenceLimit)) == null ) &&
+          (generationCount < specification.maxGenerations)){
+        if (currentFitness == populationData.population[bestFitIndex].getFitness())
+          replaceCount = replaceCount + 1
+        else {
+          replaceCount = 0
+          currentFitness = populationData.population[bestFitIndex].getFitness()
+        }
         if (replaceCount == specification.replaceInterval){
           for (n in 0 ..< nodes) {
             toNodes[n].write("REPLACE")
@@ -139,20 +149,18 @@ class MainlandRoot implements CSProcess{
           replacements = replacements + 1
         } //end replacement counting
         generationCount = generationCount + 1
-        replaceCount = replaceCount + 1
         for (n in 0 ..< nodes) {
           toNodes[n].write("REPRODUCE")
         }
         for (n in 0 ..< nodes) {
           fromNodes[n].read() // a signal that reproduction is complete
         }
-        quickSort(populationData.population, totalIndex)  // sort the population
+        quickSort(populationData.population, lastIndex)  // sort the population lastIndex ?
 //        println "generation finished $generationCount"
-
       } //end while loop
       // write outcome to CollectSolution
-      String outcome = (result == null) ? "SUCCESS" : "FAILURE"
-      output.write([outcome, result, generationCount, replacements])
+      long seedValue = specification.seeds[0]
+      output.write([seedValue, result, generationCount, replacements])
       for (n in 0 ..< nodes) {
         toNodes[n].write("FINISH")
       }

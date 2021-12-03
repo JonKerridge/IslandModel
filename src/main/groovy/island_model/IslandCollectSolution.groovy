@@ -23,13 +23,15 @@ class IslandCollectSolution implements CSProcess{
     IslandProblemSpecification spec
     long totalTime
     int totalGenerations
-    int n
+    int n, found, none
     List timeData
     List genData
     totalTime = 0
     totalGenerations = 0
     int minGenerations
     n = 0
+    found = 0
+    none = 0
     timeData = []
     genData = []
     for ( i in 0 ..< instances) {
@@ -40,10 +42,12 @@ class IslandCollectSolution implements CSProcess{
       Object result = input.read()
       long endTime = System.currentTimeMillis()
       long elapsed = endTime - startTime
-      outString = "$i, ${spec.toString()}, ->,"
+      outString = "$i, ${spec.toString()} "
       //TODO need to select the 'best' solution the one with the best Fitness value
       // but this varies with maximise or minimise problem
       if (result instanceof TerminationCollection) {
+        // no solution found
+        none = none + 1
         // each node has sent its best solution; so need to determine the overall best
         // for this we need to know it it is a minimise of maximise problem
 //        println "ICS: ${((TerminationCollection)result).bestRecords.size()} termination records read"
@@ -63,13 +67,13 @@ class IslandCollectSolution implements CSProcess{
         }
 
         outString = outString + " NONE, " +
-            "${((TerminationCollection)result).bestRecords[bestLocation].fitness}, " +
-            "${((IslandIndividual)((TerminationCollection)result).bestRecords[bestLocation]).getSolution()} ," +
+            "${((IslandIndividual)((TerminationCollection)result).bestRecords[bestLocation]).toString()} ," +
             "${spec.maxGenerations}, " +
             " $elapsed"
       }
       else {
         // solution found but
+        found = found + 1
         // more than one node might find a solution; we want minimum generations
         minGenerations = spec.maxGenerations + 1
         int minSolution
@@ -79,15 +83,13 @@ class IslandCollectSolution implements CSProcess{
             minGenerations = solutions[s].generationsTaken
             minSolution = s
           }
-        outString = outString +  " ${solutions.size()}, " +
-            "${solutions[minSolution].convergedIndividual.getFitness()}, " +
-            "${solutions[minSolution].convergedIndividual.getSolution()}, " +
+        outString = outString +  " FOUND, ${solutions.size()}, " +
+            "${solutions[minSolution].convergedIndividual.toString()}, " +
             "${solutions[minSolution].generationsTaken}, " +
-//            "${solutions[minSolution].seedValue}, " +
-            "$elapsed"
+            "$elapsed, ${solutions[minSolution].seedValue}"
       } // end else
       println "$outString"
-      printWriter.println(outString)
+//      printWriter.println(outString)
       if ( i > 0 ){
         totalTime = totalTime + elapsed
         timeData << elapsed
@@ -99,12 +101,12 @@ class IslandCollectSolution implements CSProcess{
     n = instances - 1
     double timeAverage = (double)totalTime / (double)n
     double genAverage = (double)totalGenerations / (double)n
-    println " , ${spec.toString()} , " +
+    println "${spec.toString()}, " +
         "$timeAverage, ${sd(timeData, timeAverage, n)}, " +
-        "$genAverage, ${sd(genData, genAverage, n)}, "
-    printWriter.println " , ${spec.toString()} , , , , , , ," +
+        "$genAverage, ${sd(genData, genAverage, n)}, $found, $none"
+    printWriter.println "${spec.toString()}, " +
         "$timeAverage, ${sd(timeData, timeAverage, n)}, " +
-        "$genAverage, ${sd(genData, genAverage, n)}, "
+        "$genAverage, ${sd(genData, genAverage, n)},  $found, $none"
 
     printWriter.flush()
     printWriter.close()
