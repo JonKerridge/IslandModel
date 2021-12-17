@@ -59,29 +59,26 @@ class MainlandCollectSolution implements CSProcess{
 //          "\nSpecification: ${spec.toString()} " +
 //          "\nresult: $outcome -> ${bestOutcome.toString()} in $generations generations, time = "
 //      outString = outString + " ${endTime - startTime}"
+      if ( i > 0 ){
+        timeData << elapsed
+        totalTime = totalTime + elapsed
+        genData << generations
+        totalGenerations = totalGenerations + generations
+        repData << replacements
+        totalRep = totalRep + replacements
+      } // end if
       if (bestOutcome == null) {
         none = none + 1
         outString = "$i, " +
             "${spec.toString()}, " +
-            "NONE, $replacements, $generations, $elapsed "
+            "NONE, $replacements, $generations, $elapsed, $seedValue "
       }
       else {
-        if ( i > 0 ){
-          timeData << elapsed
-          totalTime = totalTime + elapsed
-          genData << generations
-          totalGenerations = totalGenerations + generations
-          if (bestOutcome != null) {
-            repData << replacements
-            totalRep = totalRep + replacements
-          }
-          n = n + 1
-        } // end if
-        found = found + 1
+       found = found + 1
         outString = "$i, " +
             "${spec.toString()}, " +
             "FOUND, $replacements, $generations, $elapsed, ${bestOutcome.toString()}, $seedValue "
-      }
+      } // end if for bestOutcome test
       println "$outString"
 //      printWriter.println(outString) do not print out the intermediate values
 
@@ -89,6 +86,7 @@ class MainlandCollectSolution implements CSProcess{
     } // end of for loop
     // assume instances > 2
     // determine SD
+    n = instances -1
     double timeAverage = (double)totalTime / (double)n
     double genAverage = (double)totalGenerations / (double)n
     double  repAverage = (double)totalRep / (double)n

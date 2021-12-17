@@ -53,6 +53,7 @@ class IslandCollectSolution implements CSProcess{
 //        println "ICS: ${((TerminationCollection)result).bestRecords.size()} termination records read"
         BigDecimal bestFit
         int bestLocation
+        minGenerations = spec.maxGenerations
         bestLocation = 0
         bestFit = ((IslandIndividual)((TerminationCollection)result).bestRecords[bestLocation]).getFitness()
         boolean better

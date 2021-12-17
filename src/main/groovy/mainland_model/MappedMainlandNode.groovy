@@ -5,7 +5,7 @@ import jcsp.lang.CSProcess
 import jcsp.lang.ChannelInput
 import jcsp.lang.ChannelOutput
 
-class MainlandNode implements CSProcess{
+class MappedMainlandNode implements CSProcess{
   ChannelInput fromRoot
   ChannelOutput toRoot
   int nodeID, instances
@@ -13,7 +13,7 @@ class MainlandNode implements CSProcess{
 
   void run() {
 //    println "Running Node $nodeID"
-    int ppn, nodes, maxIndex, instance
+    int ppn, nodes, maxIndex, baseIndex
     // parents will be used in crossover
     // children will be produced from the  crossover operation
     // candidates are those individuals that might be overwritten if a child is a better fit
@@ -35,6 +35,7 @@ class MainlandNode implements CSProcess{
         minimise = (problem.minOrMax == "MIN")
         int extras = ppn - 4
         if (minimise){
+          baseIndex = 0
           maxIndex = (nodes * ppn) - 1
           child1 = (maxIndex+1) + (nodeID*2)
           child2 = child1 + 1
@@ -50,6 +51,7 @@ class MainlandNode implements CSProcess{
         else {
           // its a maximise problem
           maxIndex = (nodes * ppn) + (nodes * 2) -1
+          baseIndex = nodes * 2
           child1 = nodeID*2
           child2 = child1 + 1
           parent1 = maxIndex - (nodeID*2)
@@ -61,7 +63,7 @@ class MainlandNode implements CSProcess{
               otherIndividuals << ((nodes * ppn) - (e * nodes) - nodeID -1)
           }
         } // end  minimise if
-//        println "MN $nodeID: $instances, $i, $ppn, $minimise, ${problem.minOrMax}, $parent1, $parent2, $candidate1, $candidate2, $child1, $child2, $otherIndividuals"
+//        println "MN $nodeID: $instances, $i, $ppn, $minimise, p1-$parent1, p2-$parent2, c1-$candidate1, c2-$candidate2, o1-$child1, o2-$child2, $otherIndividuals"
       }// end test for first iteration
       // initialise data for this specification instance
       rng = new Random(problem.seeds[nodeID])
@@ -93,20 +95,46 @@ class MainlandNode implements CSProcess{
         String action = fromRoot.read() as String
         switch (action){
           case "REPLACE":
+            Map locationFitness = [:]
+            for ( index in baseIndex ..maxIndex){
+              locationFitness.put(index, populationAtNode.population[index].getFitness())
+            }
+//            println locationFitness
+            Map sortedMap = locationFitness.sort {a,b ->
+              a.value <=> b.value
+            }
+//            println sortedMap
+            Set locationSet = sortedMap.keySet()
             // overwrite child1 and child2
             populationAtNode.population[child1].initialise(rng)
             populationAtNode.population[child2].initialise(rng)
             populationAtNode.population[child1].evaluateFitness(evaluateData)
             populationAtNode.population[child2].evaluateFitness(evaluateData)
+            populationAtNode.replaceCandidates(child1, child2,
+                locationSet[candidate1], locationSet[candidate2])
             //  tell root replacement is complete
             toRoot.write(1)
             break
           case "REPRODUCE":
+            Map locationFitness = [:]
+            for ( index in baseIndex ..maxIndex){
+              locationFitness.put(index, populationAtNode.population[index].getFitness())
+            }
+//            println "Node $nodeID: map = $locationFitness"
+            Map sortedMap = locationFitness.sort {a,b ->
+              a.value <=> b.value
+            }
+//            println "Node $nodeID: map = $sortedMap"
+            Set locationSet = sortedMap.keySet()
+//            println "Node $nodeID: p1-$parent1, p2-$parent2, c1-$candidate1, c2-$candidate2, o1-$child1, o2-$child2, " +
+//                "${locationSet[parent1]}, ${locationSet[parent2]}, $child1, $child2 "
             // reproduce parent1 and parent 2 creating child1 and child2
-            populationAtNode.reproduce(parent1, parent2, child1, child2, rng)
+            populationAtNode.reproduce(locationSet[parent1], locationSet[parent2],
+                child1, child2, rng)
             populationAtNode.population[child1].evaluateFitness(evaluateData)
             populationAtNode.population[child2].evaluateFitness(evaluateData)
-            populationAtNode.replaceCandidates(child1, child2, candidate1, candidate2)
+            populationAtNode.replaceCandidates(child1, child2,
+                locationSet[candidate1], locationSet[candidate2])
             //  tell root reproduction is complete
             toRoot.write(1)
             break

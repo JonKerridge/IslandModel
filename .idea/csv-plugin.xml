@@ -31,6 +31,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\src\main\groovy\tspIsland\ManyIslandTSP42.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\groovy\tspMainland\ManyMainlandTSP42.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>
