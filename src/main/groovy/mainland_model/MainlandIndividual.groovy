@@ -61,7 +61,6 @@ interface MainlandIndividual {
   Object getSolution ()
 
   /**
-   * returns the fitness value of an Individual
    * @return the fitness value of an Individual
    */
   Object getFitness()

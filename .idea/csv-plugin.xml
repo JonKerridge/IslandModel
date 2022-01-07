@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\src\main\groovy\localityMax\localityMaxOneSingle.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\src\main\groovy\maxOneMainland\mainlandMaxOnesSingle.csv">
           <value>
             <Attribute>
