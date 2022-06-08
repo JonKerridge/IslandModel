@@ -102,10 +102,10 @@ class IslandCollectSolution implements CSProcess{
     n = instances - 1
     double timeAverage = (double)totalTime / (double)n
     double genAverage = (double)totalGenerations / (double)n
-    println "${spec.toString()}, " +
+    println "${spec.toString()} :- " +
         "$timeAverage, ${sd(timeData, timeAverage, n)}, " +
         "$genAverage, ${sd(genData, genAverage, n)}, $found, $none"
-    printWriter.println "${spec.toString()}, " +
+    printWriter.println "${spec.toString()} :- " +
         "$timeAverage, ${sd(timeData, timeAverage, n)}, " +
         "$genAverage, ${sd(genData, genAverage, n)},  $found, $none"
 

@@ -4,8 +4,8 @@ import island_model.IslandEngine
 import island_model.IslandProblemSpecification
 
 def problem = new IslandProblemSpecification()
-int nodes = 12
-int ppn = 6  // 8 16 24 32
+int nodes = 16
+int ppn = 8  // 6 8 16 24 32
 int geneLength = 512
 int instances = 11
 boolean doSeedModify = true
@@ -21,7 +21,7 @@ problem.migrationSize = 2
 problem.crossoverPoints = 1
 problem.maxGenerations = 4000
 problem.crossoverProbability = 1.0
-problem.mutationProbability = 0.8
+problem.mutationProbability = 0.1
 problem.convergenceLimit = problem.geneLength
 problem.minOrMax = "MAX"
 problem.doSeedModify = doSeedModify

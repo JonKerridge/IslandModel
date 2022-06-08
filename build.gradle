@@ -6,30 +6,35 @@ plugins {
 group 'jonkerridge'
 version '1.0.0'
 
+String propertyFileName = "C:/Github/gradle.properties"
+File propsFile = new File(propertyFileName)
+Properties props = new Properties()
+props.load(propsFile.newDataInputStream())
+
 repositories {
     mavenCentral()
     maven { // to download the jonkerridge.groovy_jcsp library
         name = "GitHubPackages"
         url = "https://maven.pkg.github.com/JonKerridge/groovyJCSP"
         credentials {
-            username = project.findProperty("gpr.user")
-            password = project.findProperty("gpr.key")
+            username = props.getProperty("gpr.user")
+            password = props.getProperty("gpr.key")
         }
     }
     maven { // to download the cspforjava.jcsp library
         name = "GitHubPackages"
         url = "https://maven.pkg.github.com/CSPforJAVA/jcsp"
         credentials {
-            username = project.findProperty("gpr.user")
-            password = project.findProperty("gpr.key")
+            username = props.getProperty("gpr.user")
+            password = props.getProperty("gpr.key")
         }
     }
 }
 
 dependencies {
-    implementation 'org.codehaus.groovy:groovy-all:3.0.9'
-//    implementation 'org.apache.groovy:groovy:4.0.0-beta-1'
-    implementation 'cspforjava:jcsp:1.1.9'
-    implementation 'jonkerridge:groovy_jcsp:1.1.9'
+    implementation 'org.codehaus.groovy:groovy-all:3.0.11'
+//    implementation 'org.apache.groovy:groovy-all:4.0.2'
+    implementation 'cspforjava:jcsp:1.1.10'
+    implementation 'jonkerridge:groovy_jcsp:1.1.10'
 }
 
